@@ -1,3 +1,1 @@
 # thanhhso.github.io
-
-tschüss
