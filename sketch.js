@@ -30,7 +30,7 @@ function setup() {
 
   canvas.position(0,0);
 
-  textLeft = createP("THANH NGUYEN <br> is a student in interaction design based <br> between Berlin and Schwäbisch Gmünd. He works <br> mostly within a team with ambitious goals and visions <br> to expand the border of what is currently known. <br> Here is a photo. <br><br> CONTACT <br> <a href = mailto: heyhey@thanh.so>heyhey@thanh.so</a> <br> <a href=tel:+491637859019>+491637859019</a> <br> <a href=https://linkedin.com/in/thanh-nguyen-b88721206 target=_blank >LinkedIn</a> <br><br> CV <br> <a href=/thanh-nguyen-cv.pdf download>thanh-nguyen-cv.pdf</a> <br><br> ASSOCIATES & FRIENDS <br><br> CHANGE THE TONE <br> for visionaries <br> for parents <br> for friends from the hood <br> <p>If there is a known issue<img src=/hovereffect.png alt=Warning!>");
+  textLeft = createP("THANH NGUYEN <br> is a student in interaction design based <br> between Berlin and Schwäbisch Gmünd. He works <br> mostly within a team with ambitious goals and visions <br> to expand the border of what is currently known. <br> Here is a photo. <br><br> CONTACT <br> <a href = mailto: heyhey@thanh.so>heyhey@thanh.so</a> <br> <a href=tel:+491637859019>+491637859019</a> <br> <a href=https://linkedin.com/in/thanh-nguyen-b88721206 target=_blank >LinkedIn</a> <br><br> CV <br> <a href=/thanh-nguyen-cv.pdf download>thanh-nguyen-cv.pdf</a> <br><br> ASSOCIATES & FRIENDS <br><br> CHANGE THE TONE <br> for visionaries <br> for parents <br> for friends from the hood <br> <div class=hover-title>Image Hover One</div><div class=hover-image>hovereffect.png</div>");
   textLeft.position(width/30,0);
 
   widthOfPill = windowWidth/5 - (width/15)/5;
