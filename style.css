@@ -4,17 +4,27 @@ body {
 
 p {
     font-size: 20;
+    display: inline-block;
     font-family: Arial, Helvetica, sans-serif;
+    cursor: crosshair;
 }
 
 a {
     background-position: 0 100%;
-    color: black;
+    /* color: black; */
     padding-bottom: .0em;
     text-decoration: none;
+    cursor: crosshair;
 }
-  
+
+a:visited { 
+    text-decoration: none; 
+    background-color: black;
+    color: blue;
+}
+
 a:hover {
+    text-decoration: none; 
     background-color: black;
     color: white;
     /* background-image: url("data:image/svg+xml;charset=utf8,%3Csvg id='squiggle-link' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:ev='http://www.w3.org/2001/xml-events' viewBox='0 0 20 4'%3E%3Cstyle type='text/css'%3E.squiggle{animation:shift .3s linear infinite;}@keyframes shift {from {transform:translateX(0);}to {transform:translateX(-20px);}}%3C/style%3E%3Cpath fill='none' stroke='%23453886' stroke-width='2' class='squiggle' d='M0,3.5 c 5,0,5,-3,10,-3 s 5,3,10,3 c 5,0,5,-3,10,-3 s 5,3,10,3'/%3E%3C/svg%3E"); */
@@ -26,47 +36,35 @@ a:hover {
     font-style: normal;
 }
 
-a:visited { 
-    text-decoration: none; 
+
+
+ .hover-title:hover {
+    display: inline-block;
     background-color: black;
-}
+    color: white;
+ }   
 
-.hover-title {
-    display: inline;
-    pointer-events: auto;
-    cursor: pointer;
-}
-
-.hover-image {
-    visibility: hidden;
-}
-
-body:not(.mobile) .hover-title:hover + .hover-image {
-    visibility: visible;
-    pointer-events: none;
-}
-
-.hover-image {
-    display: flex;
+ .hover-image {
+    display: none;
+    content:url(/hovereffect.png);
+    max-width: 50% !important;
+    max-height: 50% !important;
+    width: auto !important;
+    height: auto !important;
+    margin-bottom: 0;
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: -1;
     pointer-events: none;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
-/* Change width and height to scale images */
-    width: 90vw;
-    height: 90vh;
-}
-
-.hover-image img {
-    max-width: 100% !important;
-    max-height: 100% !important;
-    width: auto !important;
-    height: auto !important;
-    margin-bottom: 0;
-}
+    cursor: zoom-in;
+    
+  }
+      
+  .hover-title:hover + .hover-image {
+    display: block;
+    
+  }

@@ -14,6 +14,7 @@ let engine;
 let canvas;
 
 let textLeft;
+let currentState;
 
 let projects = ["intersection", "human mass", "happy briefing", "etf insight", "5"];
 let pills =[];
@@ -25,12 +26,18 @@ let wallRight;
 let widthOfPill;
 let heightOfPill;
 
+let img;
+
+function preload() {
+  img = loadImage('assets/bricks.jpg');
+}
+
 function setup() {
   canvas = createCanvas(windowWidth, windowHeight);
-
+  cursor(CROSS);
   canvas.position(0,0);
 
-  textLeft = createP("THANH Ngoc NGUYEN <br> is a student in interaction design based <br> between Berlin and Schwäbisch Gmünd. He works <br> mostly within a team with ambitious goals and visions <br> to expand the border of what is currently known. <br> Here is a photo. <br><br> CONTACT <br> <a href = mailto: heyhey@thanh.so>heyhey@thanh.so</a> <br> <a href=tel:+491637859019>+491637859019</a> <br> <a href=https://linkedin.com/in/thanh-nguyen-b88721206 target=_blank >LinkedIn</a> <br><br> CV <br> <a href=/thanh-nguyen-cv.pdf download>thanh-nguyen-cv.pdf</a> <br><br> ASSOCIATES & FRIENDS <br><br> CHANGE THE TONE <br> for visionaries <br> for parents <br> for friends from the hood <br> <div class=hover-title>Image Hover One</div><div class=hover-image>hovereffect.png</div>");
+  textLeft = createP("THANH NGUYEN <br> is a student in interaction design based <br> between Berlin and Schwäbisch Gmünd. He works <br> mostly within a team with ambitious goals and visions <br> to expand the border of what is currently known. <br> Here is a photo. <br><br> CONTACT <br> <a href = mailto: heyhey@thanh.so>heyhey@thanh.so</a> <br> <a href=tel:+491637859019>+491637859019</a> <br> <a href=https://linkedin.com/in/thanh-nguyen-b88721206 target=_blank >LinkedIn</a> <br><br> CV <br> <a href=/thanh-nguyen-cv.pdf download>thanh-nguyen-cv.pdf</a> <br><br> ASSOCIATES & FRIENDS <br><br> CHANGE THE TONE <br> for dreamers <br> for starters <br> for friends from the hood <br> <div class=hover-title>Image Hover One</div><div class=hover-image></div> <br>​");
   textLeft.position(width/30,0);
 
   widthOfPill = windowWidth/5 - (width/15)/5;
@@ -116,38 +123,47 @@ function draw() {
 
   for (let i = 0; i < pills.length; i++) {
     const pill = pills[i];
-    var pillColor;
+    let pillColor;
+    let pillStroke = 0;
+    let textColor;
 
     if (pill.position.y > (height - height/30) - heightOfPill/2 - 5) {
       pillColor = 'white';
+
     } else {
       pillColor = 'black';
+      for (let i = 255; i < 255; i--) {
+        pillStroke ++;
+      }
     }
    
     if((pill.position.x - widthOfPill/2<mouseX)&&(pill.position.x + widthOfPill/2>mouseX)&&(pill.position.y - heightOfPill/2<mouseY)&&(pill.position.y + heightOfPill>mouseY)){
+      // cursor(CROSS);
+      pillColor = 'black';
+      textColor = 'white'
       if (pill.label === "human mass") {
-        pillColor = 'yellow';
+        // pillColor = 'yellow';
         if (mConstraint.body) {
           humanmass();
-          pillColor = 'black';
+          // pillColor = 'black';
         }
       } else if (pill.label === "happy briefing") {
-        pillColor = 'blue';
+        // pillColor = 'blue';
         if (mConstraint.body) {
           happybriefing();
         }
       } else if (pill.label === "etf insight") {
-        pillColor = 'green';
+        // pillColor = 'green';
         if (mConstraint.body) {
           etfinsight();
         }
       } else if (pill.label === "5") {
-        pillColor = 'red';
+        // pillColor = 'red';
         if (mConstraint.body) {
           five();
         }
       } else if (pill.label === "intersection") {
-        pillColor = 'pink';
+        // pillColor = 'pink';
         if (mConstraint.body) {
           intersection();
         }
@@ -156,15 +172,19 @@ function draw() {
 
 
     fill(pillColor);
-    stroke(0);
+    stroke(pillStroke);
     strokeWeight(2);
     drawVertices(pill.vertices);
     
     noStroke();
-    fill(0);
+    fill(255);
     // textFont('inter');
     textSize(1*windowWidth/40);
     drawText(pill, projects[i]);
+
+    textSize(1*windowWidth/20);
+    fill('green');
+    text(currentState, width/2,height/2);
 
   }
 
@@ -175,15 +195,17 @@ function draw() {
   drawVertices(wallLeft.vertices);
   drawVertices(wallRight.vertices);
 
-  fill('red');
-  //middle
-  rect(width/2, 0, 1, height);
-  //left
-  rect(width/30, 0, 1, height);
-  //right
-  rect(width-width/30, 0, 1, height);
-  //above ground 
-  rect(0, (height - height/30) - heightOfPill/2 - 5, width, 1);
+
+  ////////////////// construction lines
+  // fill('red');
+  // //middle
+  // rect(width/2, 0, 1, height);
+  // //left
+  // rect(width/30, 0, 1, height);
+  // //right
+  // rect(width-width/30, 0, 1, height);
+  // //above ground 
+  // rect(0, (height - height/30) - heightOfPill/2 - 5, width, 1);
 }
 
 
@@ -196,7 +218,7 @@ function outText() {
 }
 
 function intersection() {
-  textLeft.html('intersection <br></br> <a href="https://thanh.so">thanh.so</a>');
+  textLeft.html('<a href="https://thanh.so">THANH NGUYEN</a> <br> intersection <br></br> ');
 }
 
 function etfinsight() {
@@ -205,6 +227,8 @@ function etfinsight() {
 
 function humanmass() {
   textLeft.html('human mass');
+  text('intersection', width/2, height/2);
+  currentState = "human mass";
 }
 
 function happybriefing() {
@@ -241,8 +265,6 @@ function drawText(body, txt) {
   rotate(angle);
   textAlign(CENTER, CENTER);
   text(txt, 0, 0);
-  fill('red');
-  ellipse(0,0,5);
   pop();
   
 }
