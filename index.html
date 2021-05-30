@@ -31,6 +31,8 @@
             let bc = 1;
             let cc = 2;
             let dc = 3;
+            
+            p5.disableFriendlyErrors = true; // disables FES
     
             function setup() {
                 let canvas = createCanvas(windowWidth, windowHeight);
@@ -38,7 +40,7 @@
                 canvas.style("z-index: -1");
     
                 colorMode(HSL);
-                // frameRate(10);
+                frameRate(30);
     
                 // vector
                 createAllVectors();
