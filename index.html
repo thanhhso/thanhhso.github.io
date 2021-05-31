@@ -213,7 +213,8 @@
     
             function gradientLine(x1, y1, x2, y2, c1, c2, sz) {
                 const d = dist(x1, y1, x2, y2)
-                for (let i = 0; i < d; i+=9.5) {
+                let stepJump = d/40.5;
+                for (let i = 0; i < d; i+=stepJump) {
                     const step = map(i, 0, d, 0, 1)
                     const x = lerp(x1, x2, step)
                     const y = lerp(y1, y2, step)
