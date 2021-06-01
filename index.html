@@ -28,7 +28,9 @@
             let divA, divB, divC, divE, divF, divG;
             
             /////10sec update
-            let animationMiliSec = 40000; 
+            let animationCounter = 0;
+            let animationMiliSec = 7500; 
+
     
             //color
             let colorarray;
@@ -147,9 +149,9 @@
             }
     
             // update vector positions
+            
             setInterval(function(){ updateVectors(); }, animationMiliSec);
             setInterval(function(){ changeColor(); }, 10000);
-            setInterval(function(){ updateVectors(); }, animationMiliSec/2);
 
             function changeColor() {
                 if (ac > 4) {
@@ -171,6 +173,7 @@
             }
     
             function updateVectors() {
+
                 startTime = millis();
                 endTime = startTime + animationMiliSec;
                 A0 = A1;
