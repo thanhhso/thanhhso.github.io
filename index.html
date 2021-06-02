@@ -8,11 +8,11 @@
                 
                 // vector
                 let A0, A1, B0, B1, C0, C1, D0, D1, E0, E1, F0, F1, G0, G1, H0, H1;
-                let AX, BX, CX;
+                let AX, BX, CX, DX, EX;
                 let startTime, endTime;
         
                 // html Dom
-                let divA, divB, divC, divE, divF, divG;
+                let divA, divB, divC, divD, divE, divF, divG;
                 
                 /////10sec update
                 let animationCounter = 0;
@@ -25,6 +25,7 @@
                 let bc = 1;
                 let cc = 2;
                 let dc = 3;
+                let ec = 4;
     
                 p5.disableFriendlyErrors = true; // disables FES
         
@@ -45,8 +46,8 @@
                     divA = createDiv(0);
                     divB = createDiv(0);
                     divC = createDiv(0);
-                    // divD = createDiv(0);
-                    // divE = createDiv(0);
+                    divD = createDiv(0);
+                    divE = createDiv(0);
                     // divF = createDiv(0);
                     // divG = createDiv(0);
                     // divH = createDiv(0);
@@ -67,6 +68,12 @@
         
                     let C_dist = p5.Vector.sub(C1, C0).mult(scale);
                     CX = p5.Vector.add(C0, C_dist);
+
+                    let D_dist = p5.Vector.sub(D1, D0).mult(scale);
+                    DX = p5.Vector.add(D0, D_dist);
+
+                    let E_dist = p5.Vector.sub(E1, E0).mult(scale);
+                    EX = p5.Vector.add(E0, E_dist);
         
                     // draw ellipses & lines
                     //fill('#333333');
@@ -85,6 +92,9 @@
                     noStroke();
                     gradientLine(AX.x, AX.y, BX.x, BX.y, colorarray[ac], colorarray[bc], 200);
                     gradientLine(BX.x, BX.y, CX.x, CX.y, colorarray[bc], colorarray[cc], 200);
+                    gradientLine(CX.x, CX.y, DX.x, DX.y, colorarray[cc], colorarray[dc], 200);
+                    gradientLine(DX.x, DX.y, EX.x, EX.y, colorarray[dc], colorarray[ec], 200);
+
                     
         
                     // p5.dom
@@ -100,30 +110,33 @@
                     // let textBoxF = ["", ""]
                     // let textBoxG = ["", ""]
                     // let textBoxH = ["", ""]
-        
+                    
+                    // text & numbers in to div's
                     divA.html("A" + "<br>" +  Math.round(AX.x * 100) / 100 + "<br>" + Math.round(AX.y * 100) / 100);
                     divB.html("B" + "<br>" +  Math.round(BX.x * 100) / 100 + "<br>" + Math.round(BX.y * 100) / 100);
                     divC.html("C" + "<br>" +  Math.round(CX.x * 100) / 100 + "<br>" + Math.round(CX.y * 100) / 100);
-                    // divD.html("D" + "<br>" +  Math.round(DX.x * 100) / 100 + "<br>" + Math.round(DX.y * 100) / 100);
-                    // divE.html("E" + "<br>" +  Math.round(EX.x * 100) / 100 + "<br>" + Math.round(EX.y * 100) / 100);
+                    divD.html("D" + "<br>" +  Math.round(DX.x * 100) / 100 + "<br>" + Math.round(DX.y * 100) / 100);
+                    divE.html("E" + "<br>" +  Math.round(EX.x * 100) / 100 + "<br>" + Math.round(EX.y * 100) / 100);
                     // divF.html("F" + "<br>" +  Math.round(FX.x * 100) / 100 + "<br>" + Math.round(FX.y * 100) / 100);
                     // divG.html("G" + "<br>" +  Math.round(GX.x * 100) / 100 + "<br>" + Math.round(GX.y * 100) / 100);
                     // divH.html("H" + "<br>" +  Math.round(HX.x * 100) / 100 + "<br>" + Math.round(HX.y * 100) / 100);
-        
+                    
+                    // give div's an id
                     divA.id('divA');
                     divB.id('divB');
                     divC.id('divC');
-                    // divD.id('divD');
-                    // divE.id('divE');
+                    divD.id('divD');
+                    divE.id('divE');
                     // divF.id('divF');
                     // divG.id('divG');
                     // divH.id('divH');
-        
+                    
+                    //position div's to vector
                     divA.position(AX.x - 20, AX.y+10);
                     divB.position(BX.x - 20, BX.y+10);
                     divC.position(CX.x - 20, CX.y+10);
-                    // divD.position(DX.x + 15, DX.y);
-                    // divE.position(EX.x + 15, EX.y);
+                    divD.position(DX.x - 20, DX.y+10);
+                    divE.position(EX.x - 20, EX.y+10);
                     // divF.position(FX.x + 15, FX.y);
                     // divG.position(GX.x + 15, GX.y);
                     // divH.position(HX.x + 15, HX.y);
@@ -166,10 +179,14 @@
                     if (dc > 4) {
                         dc = 0;
                     }
+                    if (ec > 4) {
+                        ec = 0;
+                    }
                     ac += 1
                     bc += 1
                     cc += 1
                     dc += 1
+                    ec += 1
                 }
         
                 function updateVectors() {
@@ -180,7 +197,7 @@
                     B0 = B1;
                     C0 = C1;
                     D0 = D1;
-                    // E0 = E1;
+                    E0 = E1;
                     // F0 = F1;
                     // G0 = G1;
                     // H0 = H1;
@@ -189,7 +206,7 @@
                     B1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                    // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // G1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // H1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
@@ -205,8 +222,8 @@
                     C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     D0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                    // E0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                    // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    E0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // F0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
                     // G0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
