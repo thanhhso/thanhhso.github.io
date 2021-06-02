@@ -1,19 +1,248 @@
 <html>
     <body>
+        <!-- <p>(https://thanh.so) is underconstruction...</p>
+        <a href = "mailto: heyhey@thanh.so">heyhey@thanh.so</a> -->
+        <main class="main-wrapper">
+            <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
+            <script type="text/javascript">
+                
+                // vector
+                let A0, A1, B0, B1, C0, C1, D0, D1, E0, E1, F0, F1, G0, G1, H0, H1;
+                let AX, BX, CX;
+                let startTime, endTime;
+        
+                // html Dom
+                let divA, divB, divC, divE, divF, divG;
+                
+                /////10sec update
+                let animationCounter = 0;
+                let animationMiliSec = 7500; 
+    
+        
+                //color
+                let colorarray;
+                let ac = 0;
+                let bc = 1;
+                let cc = 2;
+                let dc = 3;
+    
+                p5.disableFriendlyErrors = true; // disables FES
+        
+                function setup() {
+                    let canvas = createCanvas(windowWidth, windowHeight);
+                    canvas.position(0.0);
+                    canvas.style("z-index: -1");
+        
+                    colorMode(HSL);
+                    frameRate(60);
+        
+                    // vector
+                    createAllVectors();
+                    startTime = millis();
+                    endTime = startTime + animationMiliSec;
+        
+                    // create div's
+                    divA = createDiv(0);
+                    divB = createDiv(0);
+                    divC = createDiv(0);
+                    // divD = createDiv(0);
+                    // divE = createDiv(0);
+                    // divF = createDiv(0);
+                    // divG = createDiv(0);
+                    // divH = createDiv(0);
+                }
+        
+                function draw() {
+                    background('white');
+        
+                    // vector 
+                    let currentTIme = millis();
+                    let scale = min(1, (currentTIme - startTime) / (endTime - startTime));
+        
+                    let A_dist = p5.Vector.sub(A1, A0).mult(scale);
+                    AX = p5.Vector.add(A0, A_dist);
+        
+                    let B_dist = p5.Vector.sub(B1, B0).mult(scale);
+                    BX = p5.Vector.add(B0, B_dist);
+        
+                    let C_dist = p5.Vector.sub(C1, C0).mult(scale);
+                    CX = p5.Vector.add(C0, C_dist);
+        
+                    // draw ellipses & lines
+                    //fill('#333333');
+                    //ellipse(AX.x, AX.y, 5, 5);
+                    //ellipse(BX.x, BX.y, 5, 5);
+                    //ellipse(CX.x, CX.y, 5, 5);
+        
+                    //strokeWeight(1);
+                    //line(AX.x, AX.y, BX.x, BX.y);
+                    //line(BX.x, BX.y, CX.x, CX.y);
+        
+                    // draw gradient lines
+                    colorarray = [color(233, 81, 73), color(196, 86, 69), color(137, 87, 70), color(61, 95, 66), color(237, 61, 65), color(317, 73, 69), color(2, 78, 60)]
+                    let aCol = colorarray[random(0, colorarray.length)];
+        
+                    noStroke();
+                    gradientLine(AX.x, AX.y, BX.x, BX.y, colorarray[ac], colorarray[bc], 200);
+                    gradientLine(BX.x, BX.y, CX.x, CX.y, colorarray[bc], colorarray[cc], 200);
+                    
+        
+                    // p5.dom
+                    // text("A1", AX.x, AX.y - 10);
+                    // text(Math.round(AX.x * 100) / 100, AX.x, AX.y);
+                    // text(Math.round(AX.y * 100) / 100, AX.x, AX.y + 10);
+        
+                    let textBoxA = ["intersection", "Is it possible to fuse acceleration and breaking with steering?"]
+                    let textBoxB = ["happy briefing", ""]
+                    let textBoxC = ["", ""]
+                    // let textBoxD = ["", ""]
+                    // let textBoxE = ["", ""]
+                    // let textBoxF = ["", ""]
+                    // let textBoxG = ["", ""]
+                    // let textBoxH = ["", ""]
+        
+                    divA.html("A" + "<br>" +  Math.round(AX.x * 100) / 100 + "<br>" + Math.round(AX.y * 100) / 100);
+                    divB.html("B" + "<br>" +  Math.round(BX.x * 100) / 100 + "<br>" + Math.round(BX.y * 100) / 100);
+                    divC.html("C" + "<br>" +  Math.round(CX.x * 100) / 100 + "<br>" + Math.round(CX.y * 100) / 100);
+                    // divD.html("D" + "<br>" +  Math.round(DX.x * 100) / 100 + "<br>" + Math.round(DX.y * 100) / 100);
+                    // divE.html("E" + "<br>" +  Math.round(EX.x * 100) / 100 + "<br>" + Math.round(EX.y * 100) / 100);
+                    // divF.html("F" + "<br>" +  Math.round(FX.x * 100) / 100 + "<br>" + Math.round(FX.y * 100) / 100);
+                    // divG.html("G" + "<br>" +  Math.round(GX.x * 100) / 100 + "<br>" + Math.round(GX.y * 100) / 100);
+                    // divH.html("H" + "<br>" +  Math.round(HX.x * 100) / 100 + "<br>" + Math.round(HX.y * 100) / 100);
+        
+                    divA.id('divA');
+                    divB.id('divB');
+                    divC.id('divC');
+                    // divD.id('divD');
+                    // divE.id('divE');
+                    // divF.id('divF');
+                    // divG.id('divG');
+                    // divH.id('divH');
+        
+                    divA.position(AX.x - 20, AX.y+10);
+                    divB.position(BX.x - 20, BX.y+10);
+                    divC.position(CX.x - 20, CX.y+10);
+                    // divD.position(DX.x + 15, DX.y);
+                    // divE.position(EX.x + 15, EX.y);
+                    // divF.position(FX.x + 15, FX.y);
+                    // divG.position(GX.x + 15, GX.y);
+                    // divH.position(HX.x + 15, HX.y);
+        
+                    // divC.position(BX.x + 15, BX.y);
+                    // divD.position(BX.x + 15, BX.y);
+                    // divE.position(BX.x + 15, BX.y);
+                    // divF.position(BX.x + 15, BX.y);
+                    // divG.position(BX.x + 15, BX.y);
+                }
+        
+                // update vector positions
+                setInterval(function(){ updateVectors(); }, animationMiliSec);
+                setInterval(function(){ changeColor(); }, 10000);
+                // mouse Interaction 
+                
+                //Make things draggable
+                function touchMoved() {
+                    if (dist(AX.x, AX.y, mouseX, mouseY) < 100) {
+                        A1 = createVector(mouseX, mouseY);
+                    } else if (dist(BX.x, BX.y, mouseX, mouseY) < 100) {
+                        B1 = createVector(mouseX, mouseY);
+                    } else if (dist(CX.x, CX.y, mouseX, mouseY) < 100) {
+                        C1 = createVector(mouseX, mouseY);
+                        console.log('greiftC')
+                    }
+                }
+    
+    
+                function changeColor() {
+                    if (ac > 4) {
+                        ac = 0;
+                    }
+                    if (bc > 4) {
+                        bc = 0;
+                    }
+                    if (cc > 4) {
+                        cc = 0;
+                    }
+                    if (dc > 4) {
+                        dc = 0;
+                    }
+                    ac += 1
+                    bc += 1
+                    cc += 1
+                    dc += 1
+                }
+        
+                function updateVectors() {
+    
+                    startTime = millis();
+                    endTime = startTime + animationMiliSec;
+                    A0 = A1;
+                    B0 = B1;
+                    C0 = C1;
+                    D0 = D1;
+                    // E0 = E1;
+                    // F0 = F1;
+                    // G0 = G1;
+                    // H0 = H1;
+        
+                    A1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    B1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // G1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // H1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                }
+        
+                function createAllVectors() {
+        
+                    A0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    A1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    B0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    B1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    C0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    D0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // E0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // F0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // G0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // G1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // H0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                    // H1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
+                }
+        
+                function gradientLine(x1, y1, x2, y2, c1, c2, sz) {
+                    const d = dist(x1, y1, x2, y2)
+                    let stepJump = d/40.5;
+                    for (let i = 0; i < d; i+=stepJump) {
+                        const step = map(i, 0, d, 0, 1)
+                        const x = lerp(x1, x2, step)
+                        const y = lerp(y1, y2, step)
+                        const c = lerpColor(c1, c2, step)
+                        fill(c)
+                        ellipse(x, y, sz, sz)
+                    }
+                }
+                </script> 
+        </main>
         <style>
-            html {
+            html,body
+            {
                 overflow: hidden;
-                position: relative;
+                position: fixed;
                 margin: 0;
                 padding: 0;
             }
 
-            body
-            {
-                overflow: hidden;
-                position: relative;
-                margin: 0;
-                padding: 0;
+            body > .main-wrapper {
+                width: 100vw;
+                height: 100vh;
+                overflow-y: scroll;
+                -webkit-overflow-scrolling: touch; /* enables “momentum” (smooth) scrolling */
             }
 
             div {
@@ -29,234 +258,6 @@
                 font-family: Arial, Helvetica, sans-serif;
                 font-size: 12px;
             }
-        </style>
-        <!-- <p>(https://thanh.so) is underconstruction...</p>
-        <a href = "mailto: heyhey@thanh.so">heyhey@thanh.so</a> -->
-        <script src="https://cdn.jsdelivr.net/npm/p5@1.3.1/lib/p5.js"></script>
-        <script type="text/javascript">
-            
-            // vector
-            let A0, A1, B0, B1, C0, C1, D0, D1, E0, E1, F0, F1, G0, G1, H0, H1;
-            let AX, BX, CX;
-            let startTime, endTime;
-    
-            // html Dom
-            let divA, divB, divC, divE, divF, divG;
-            
-            /////10sec update
-            let animationCounter = 0;
-            let animationMiliSec = 7500; 
-
-    
-            //color
-            let colorarray;
-            let ac = 0;
-            let bc = 1;
-            let cc = 2;
-            let dc = 3;
-
-            p5.disableFriendlyErrors = true; // disables FES
-    
-            function setup() {
-                let canvas = createCanvas(windowWidth, windowHeight);
-                canvas.position(0.0);
-                canvas.style("z-index: -1");
-    
-                colorMode(HSL);
-                frameRate(60);
-    
-                // vector
-                createAllVectors();
-                startTime = millis();
-                endTime = startTime + animationMiliSec;
-    
-                // create div's
-                divA = createDiv(0);
-                divB = createDiv(0);
-                divC = createDiv(0);
-                // divD = createDiv(0);
-                // divE = createDiv(0);
-                // divF = createDiv(0);
-                // divG = createDiv(0);
-                // divH = createDiv(0);
-            }
-    
-            function draw() {
-                background('white');
-    
-                // vector 
-                let currentTIme = millis();
-                let scale = min(1, (currentTIme - startTime) / (endTime - startTime));
-    
-                let A_dist = p5.Vector.sub(A1, A0).mult(scale);
-                AX = p5.Vector.add(A0, A_dist);
-    
-                let B_dist = p5.Vector.sub(B1, B0).mult(scale);
-                BX = p5.Vector.add(B0, B_dist);
-    
-                let C_dist = p5.Vector.sub(C1, C0).mult(scale);
-                CX = p5.Vector.add(C0, C_dist);
-    
-                // draw ellipses & lines
-                //fill('#333333');
-                //ellipse(AX.x, AX.y, 5, 5);
-                //ellipse(BX.x, BX.y, 5, 5);
-                //ellipse(CX.x, CX.y, 5, 5);
-    
-                //strokeWeight(1);
-                //line(AX.x, AX.y, BX.x, BX.y);
-                //line(BX.x, BX.y, CX.x, CX.y);
-    
-                // draw gradient lines
-                colorarray = [color(233, 81, 73), color(196, 86, 69), color(137, 87, 70), color(61, 95, 66), color(237, 61, 65), color(317, 73, 69), color(2, 78, 60)]
-                let aCol = colorarray[random(0, colorarray.length)];
-    
-                noStroke();
-                gradientLine(AX.x, AX.y, BX.x, BX.y, colorarray[ac], colorarray[bc], 200);
-                gradientLine(BX.x, BX.y, CX.x, CX.y, colorarray[bc], colorarray[cc], 200);
-                
-    
-                // p5.dom
-                // text("A1", AX.x, AX.y - 10);
-                // text(Math.round(AX.x * 100) / 100, AX.x, AX.y);
-                // text(Math.round(AX.y * 100) / 100, AX.x, AX.y + 10);
-    
-                let textBoxA = ["intersection", "Is it possible to fuse acceleration and breaking with steering?"]
-                let textBoxB = ["happy briefing", ""]
-                let textBoxC = ["", ""]
-                // let textBoxD = ["", ""]
-                // let textBoxE = ["", ""]
-                // let textBoxF = ["", ""]
-                // let textBoxG = ["", ""]
-                // let textBoxH = ["", ""]
-    
-                divA.html("A" + "<br>" +  Math.round(AX.x * 100) / 100 + "<br>" + Math.round(AX.y * 100) / 100);
-                divB.html("B" + "<br>" +  Math.round(BX.x * 100) / 100 + "<br>" + Math.round(BX.y * 100) / 100);
-                divC.html("C" + "<br>" +  Math.round(CX.x * 100) / 100 + "<br>" + Math.round(CX.y * 100) / 100);
-                // divD.html("D" + "<br>" +  Math.round(DX.x * 100) / 100 + "<br>" + Math.round(DX.y * 100) / 100);
-                // divE.html("E" + "<br>" +  Math.round(EX.x * 100) / 100 + "<br>" + Math.round(EX.y * 100) / 100);
-                // divF.html("F" + "<br>" +  Math.round(FX.x * 100) / 100 + "<br>" + Math.round(FX.y * 100) / 100);
-                // divG.html("G" + "<br>" +  Math.round(GX.x * 100) / 100 + "<br>" + Math.round(GX.y * 100) / 100);
-                // divH.html("H" + "<br>" +  Math.round(HX.x * 100) / 100 + "<br>" + Math.round(HX.y * 100) / 100);
-    
-                divA.id('divA');
-                divB.id('divB');
-                divC.id('divC');
-                // divD.id('divD');
-                // divE.id('divE');
-                // divF.id('divF');
-                // divG.id('divG');
-                // divH.id('divH');
-    
-                divA.position(AX.x - 20, AX.y+10);
-                divB.position(BX.x - 20, BX.y+10);
-                divC.position(CX.x - 20, CX.y+10);
-                // divD.position(DX.x + 15, DX.y);
-                // divE.position(EX.x + 15, EX.y);
-                // divF.position(FX.x + 15, FX.y);
-                // divG.position(GX.x + 15, GX.y);
-                // divH.position(HX.x + 15, HX.y);
-    
-                // divC.position(BX.x + 15, BX.y);
-                // divD.position(BX.x + 15, BX.y);
-                // divE.position(BX.x + 15, BX.y);
-                // divF.position(BX.x + 15, BX.y);
-                // divG.position(BX.x + 15, BX.y);
-            }
-    
-            // update vector positions
-            setInterval(function(){ updateVectors(); }, animationMiliSec);
-            setInterval(function(){ changeColor(); }, 10000);
-            // mouse Interaction 
-            
-            //Make things draggable
-            function touchMoved() {
-                if (dist(AX.x, AX.y, mouseX, mouseY) < 100) {
-                    A1 = createVector(mouseX, mouseY);
-                } else if (dist(BX.x, BX.y, mouseX, mouseY) < 100) {
-                    B1 = createVector(mouseX, mouseY);
-                } else if (dist(CX.x, CX.y, mouseX, mouseY) < 100) {
-                    C1 = createVector(mouseX, mouseY);
-                    console.log('greiftC')
-                }
-            }
-
-
-            function changeColor() {
-                if (ac > 4) {
-                    ac = 0;
-                }
-                if (bc > 4) {
-                    bc = 0;
-                }
-                if (cc > 4) {
-                    cc = 0;
-                }
-                if (dc > 4) {
-                    dc = 0;
-                }
-                ac += 1
-                bc += 1
-                cc += 1
-                dc += 1
-            }
-    
-            function updateVectors() {
-
-                startTime = millis();
-                endTime = startTime + animationMiliSec;
-                A0 = A1;
-                B0 = B1;
-                C0 = C1;
-                D0 = D1;
-                // E0 = E1;
-                // F0 = F1;
-                // G0 = G1;
-                // H0 = H1;
-    
-                A1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                B1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // G1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // H1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-            }
-    
-            function createAllVectors() {
-    
-                A0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                A1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                B0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                B1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                C0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                C1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                D0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                D1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // E0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // E1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // F0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // F1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // G0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // G1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // H0 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-                // H1 = createVector(random(100, windowWidth-100), random(100, windowHeight-100));
-            }
-    
-            function gradientLine(x1, y1, x2, y2, c1, c2, sz) {
-                const d = dist(x1, y1, x2, y2)
-                let stepJump = d/40.5;
-                for (let i = 0; i < d; i+=stepJump) {
-                    const step = map(i, 0, d, 0, 1)
-                    const x = lerp(x1, x2, step)
-                    const y = lerp(y1, y2, step)
-                    const c = lerpColor(c1, c2, step)
-                    fill(c)
-                    ellipse(x, y, sz, sz)
-                }
-            }
-            </script> 
-            
+        </style>            
     </body>
 </html>
