@@ -1105,8 +1105,8 @@ figcaption {
 
 @font-face {
   font-family: 'Gt cinetype';
-  src: url('../fonts/GT-Cinetype-Light.woff') format('woff'), url('../fonts/GT-Cinetype-Light.otf') format('opentype');
+  src: url('../fonts/GT-Cinetype-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
 }
