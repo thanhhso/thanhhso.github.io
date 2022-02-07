@@ -148,7 +148,7 @@ figcaption {
   -ms-flex-align: start;
   align-items: flex-start;
   opacity: 1;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 14vw;
   line-height: 100%;
@@ -356,14 +356,14 @@ figcaption {
 
 .body {
   background-color: #000;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-weight: 300;
 }
 
 .body.main {
   background-color: #000;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -450,7 +450,7 @@ figcaption {
   grid-row-gap: 0px;
   -ms-grid-rows: 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh;
   grid-template-rows: 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh 8.33vh;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -478,7 +478,7 @@ figcaption {
 }
 
 .div-grid.project-a {
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -488,7 +488,7 @@ figcaption {
 }
 
 .div-grid.link {
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -499,7 +499,7 @@ figcaption {
 .text-block-grid {
   padding-top: 0px;
   padding-left: 15px;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #fff;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -509,9 +509,11 @@ figcaption {
 
 .text-block-grid.canvas {
   padding-left: 8px;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
+  font-weight: 300;
 }
 
 .text-block-grid.canvas.imprint {
@@ -525,8 +527,10 @@ figcaption {
 }
 
 .text-block-grid.canvas.imprint {
+  font-family: 'Gt cinetype', Arial, sans-serif;
   font-size: 0.6em;
   line-height: 1.3em;
+  font-weight: 300;
 }
 
 .text-block-grid.main {
@@ -575,7 +579,7 @@ figcaption {
 
 .canvas-grid.about {
   background-color: #fff;
-  font-family: 'Gt cinetype', 'Times New Roman', sans-serif;
+  font-family: 'Gt cinetype', Arial, sans-serif;
   color: #000;
   font-size: 1.2vh;
   line-height: 1.5vh;
@@ -583,6 +587,7 @@ figcaption {
 }
 
 .text-description {
+  font-family: 'Gt cinetype', Arial, sans-serif;
   font-weight: 300;
   text-transform: uppercase;
 }
@@ -1100,7 +1105,7 @@ figcaption {
 
 @font-face {
   font-family: 'Gt cinetype';
-  src: url('../fonts/GT-Cinetype-Light.woff') format('woff');
+  src: url('../fonts/GT-Cinetype-Light.woff') format('woff'), url('../fonts/GT-Cinetype-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
