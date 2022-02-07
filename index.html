@@ -506,6 +506,7 @@ let mouse = {
 };
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
   $('canvas').css('z-index', '-10');
+  console.log('MOBILE')
 }
 let stage = new PIXI.Container();
 let renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight, { transparent: true});
