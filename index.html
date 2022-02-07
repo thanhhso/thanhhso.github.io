@@ -505,7 +505,7 @@ let mouse = {
   py: 1 
 };
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-  $('canvas').css('z-index', '-10');
+  $( "canvas" ).remove();
   console.log('MOBILE')
 }
 let stage = new PIXI.Container();
