@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. http://www.webflow.com  -->
-<!--  Last Published: Wed Feb 09 2022 13:49:34 GMT+0000 (Coordinated Universal Time)  -->
+<!--  Last Published: Wed Feb 09 2022 12:57:23 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="61f5cab936e253df468ed541" data-wf-site="61281ba7e8fda2d485a21101">
 <head>
   <meta charset="utf-8">
@@ -39,7 +39,7 @@ canvas + canvas {
 </head>
 <body class="body main">
   <div class="canvas-flag noselect grabbable">
-    <div class="html-embed-3 w-embed"><canvas id="canvas" width="100vw" height="100vh"></canvas></div>
+    <div class="html-embed-3 w-embed"><canvas class="noselect grabbable" id="canvas" width="100vw" height="100vh"></canvas></div>
   </div>
   <div class="canvas-grid noselect grabbable">
     <div class="w-layout-grid grid-project start">
@@ -463,7 +463,7 @@ let opts = {
   bounce: 0.3,
   pointsX: Math.floor(window.innerWidth/8),
   pointsY: Math.floor(window.innerHeight/8),
-  renderCloth: false,
+  renderCloth: true,
   mouseInfluence: 35,
   pinCorners: false,
   randomImage() {
@@ -475,7 +475,7 @@ console.log(document.getElementById('canvas'))
 // let canvas = document.getElementsByClassName('canvas')
 let ctx = canvas.getContext('2d');
 document.body.appendChild(canvas);
-ctx.strokeStyle = '#555';
+ctx.strokeStyle = '#FFFFFF';
 let pointsXwidth = window.innerWidth/5
 console.log(Math.floor(window.innerWidth/8));
 function gcd(x, y){
@@ -709,7 +709,9 @@ function pointerUp(e) {
 }
 
 function canvasInvert() {
+  // $("canvas").css("filter", "invert(1)");
   $("canvas").css("background-color", "white");
+  console.log('$("canvas").css("background-color", "white");')
 }
 
 document.body.addEventListener('mousedown', pointerDown, canvasInvert);
