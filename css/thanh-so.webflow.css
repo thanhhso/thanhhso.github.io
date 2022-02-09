@@ -12,7 +12,7 @@
 
 body {
   font-family: Montserrat, sans-serif;
-  color: #1a1b1f;
+  color: black;
   font-size: 16px;
   line-height: 28px;
   font-weight: 400;
@@ -430,6 +430,7 @@ figcaption {
 }
 
 .grid-project.main.project {
+  position: absolute;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -465,10 +466,8 @@ figcaption {
 }
 
 .div-plus.canvas {
-  margin-top: -8px;
+  margin-top: -16px;
   margin-left: -8px;
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
 }
 
 .div-grid {
@@ -552,8 +551,15 @@ figcaption {
 }
 
 .html-embed-video-background.main {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: auto;
+  width: 100vw;
+  height: 100vh;
   background-color: transparent;
-  opacity: 1;
+  opacity: 0.75;
   mix-blend-mode: normal;
 }
 
@@ -565,16 +571,20 @@ figcaption {
   bottom: auto;
   z-index: 1;
   display: block;
-  width: auto;
-  background-color: #000;
+  width: 100vw;
+  height: 100vh;
 }
 
 .canvas-grid {
-  position: relative;
-  z-index: 0;
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  right: 0%;
+  bottom: auto;
+  z-index: 1;
   width: 100vw;
   height: 100vh;
-  background-color: #fff;
+  background-color: transparent;
 }
 
 .canvas-grid.about {
@@ -588,6 +598,7 @@ figcaption {
 
 .text-description {
   font-family: 'Gt cinetype', Arial, sans-serif;
+  color: #fff;
   font-weight: 300;
   text-transform: uppercase;
 }
@@ -602,6 +613,17 @@ figcaption {
 
 .scroll-here {
   height: 1px;
+}
+
+.plus {
+  margin-top: 0px;
+  margin-left: 0px;
+}
+
+.about-me-grid {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
 }
 
 @media screen and (max-width: 991px) {
@@ -826,6 +848,14 @@ figcaption {
   grid-row-start: 11;
   -ms-grid-row-span: 2;
   grid-row-end: 13;
+}
+
+#w-node-_5081551a-b14b-8794-3975-b71d019e3904-468ed541 {
+  -ms-grid-row: 21;
+  -ms-grid-row-span: 3;
+  -ms-grid-column: 11;
+  -ms-grid-column-span: 3;
+  grid-area: Area-12;
 }
 
 #w-node-_59633721-91c4-f302-b0fc-c07071a2c11b-468ed541 {
@@ -1109,4 +1139,28 @@ figcaption {
   font-weight: 300;
   font-style: normal;
   font-display: block;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
