@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
+  <script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js" type="text/javascript"></script>
+  <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+  <style>
+    html, body {margin: 0; padding: 0;} canvas {display: block;} * {font-family: sans-serif;}
+  </style>
+  <title>yes master</title>
+</head>
+<body>
+  <p id="status">Loading Model...</p>
+  <!-- <script src="sketch.js"></script> -->
+  <script>
+    let video;
+    let yolo;
+    let status;
+    let objects = [];
+    let objectResult;
+    const api = 'https://www.wikihow.com/api.php?format=json&action=';
+    let query;
+    let response;
+    let respsonse_response;
+    let commando;
+    let commandoText;
+
+    function preload() {
+      wikiHowHTTTP(query);
+    }
+
+    function setup() {
+      createCanvas(848, 480);
+      frameRate(25)
+      video = createCapture(VIDEO);
+      video.size(848, 480);
+
+      // Create a YOLO method
+      yolo = ml5.YOLO(video, startDetecting);
+
+      // Hide the original video
+      video.hide();
+      status = select('#status');
+      
+    }
+
+    function draw() {
+      image(video, 0, 0, width, height);
+      for (let i = 0; i < objects.length; i++) {
+        noStroke();
+        fill('red');
+        text(objects[i].className, objects[i].x * width, objects[i].y * height - 5);
+        noFill();
+        strokeWeight(4);
+        stroke(0, 255, 0);
+        rect(objects[i].x * width, objects[i].y * height, objects[i].w * width, objects[i].h * height);
+        objectResult = objects[i].className;
+      }
+
+      query = objectResult;
+      // text(commando, 0, 0, width, height);
+      // noLoop();
+      // console.log(objectResult)
+
+      fill('red');
+      // text(commandoText, windowWidth/2, windowHeight/2);
+
+    }
+
+    setInterval(function(){ 
+      /// WikiHow API Stuff
+      if (!response) {
+        // Wait until the WikiHow data has loaded before drawing.
+        return;
+      }
+      wikiHowHTTTP(query);
+      // commando = random(response['query']['search']);
+      commando = random(response.query.search);
+      commandoText = commando['title']
+      textToSpeech(commandoText);
+      status.html(commandoText);
+      commando = "";
+
+    }, 5000);//run this thang every 5 seconds
+
+    // if(!(objects[0].className = objects[1].className) ) {
+    //   textToSpeech(objectResult);
+    //   console.log('! working');
+    // }
+
+
+    function wikiHowHTTTP(q) {
+      // Get the 10 first results from the WikiHow database using the query
+        let url = api + 'query&format=json&utf8=&list=search&srsearch=' + q + "&srlimit=" + 10;
+      // console.log(url);
+      
+      httpGet(url, 'jsonp', false, function(r) {
+        // when the HTTP request completes, populate the variable that holds the results data
+        response = r;
+      });
+      if (!response) {
+        // Wait until the WikiHow data has loaded before drawing.
+        return;
+      }
+    }
+
+
+    function startDetecting() {
+      status.html('Model loaded!');
+      detect();
+    }
+
+    function detect() {
+      yolo.detect(function(err, results) {
+        objects = results;
+        detect();
+      });
+    }
+
+    function textToSpeech(text) {
+      var msg = new SpeechSynthesisUtterance();
+      msg.text = text;
+      window.speechSynthesis.speak(msg);
+      // console.log('msg:' + msg.text)
+    }
+
+    function mousePressed() {
+      commando = random(response['query']['search']);
+      var msg = new SpeechSynthesisUtterance();
+      msg.text = objectResult;
+      window.speechSynthesis.speak(msg);
+      // console.log('msg:' + msg.text)
+    }
+  </script>
+</body>
+</html>
