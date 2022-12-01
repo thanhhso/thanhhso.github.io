@@ -33,12 +33,30 @@
 
     let p5speech = new p5.Speech(); // speech synthesis object
 
+    let capture;	
+    let w = 360;
+    let h = 780;
+
     function preload() {
       wikiHowHTTTP(query);
     }
 
     function setup() {
-      createCanvas(displayWidth, displayHeight);
+
+      capture = createCapture({
+        audio: false,
+        video: {
+            width: w,
+            height: h
+        }
+      }, function() {
+          console.log('capture ready.')
+      });
+      capture.elt.setAttribute('playsinline', '');
+      capture.hide();
+      capture.size(w, h);
+      canvas = createCanvas(w, h);
+
       background(239, 170, 216); 
       frameRate(25)
       video = createCapture(VIDEO);
