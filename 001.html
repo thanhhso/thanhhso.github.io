@@ -59,6 +59,7 @@ video: true
 }
 
 function openCamera() {
+console.log('openCamera()');
 //Ask the User for the access of the device camera and microphone
 navigator.mediaDevices.getUserMedia(constraints)
 .then(mediaStream => {
