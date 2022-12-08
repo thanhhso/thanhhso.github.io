@@ -1,84 +1,19 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
 
+  <title>Real time Object Detection using COCO-SSD and p5.js</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
-  <script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js" type="text/javascript"></script>
-  <script src="https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"></script>
-  <style>
-    html, body {margin: 0; padding: 0;} canvas {display: block;} * {font-family: sans-serif;} video {background-color: black;margin-bottom: 1rem;} #error {
-            color: red;
-            padding: 0.6rem;
-            background-color: rgb(236 157 157);
-            margin-bottom: 0.6rem;
-            display: none;
-        }
-  </style>
-  <title>001</title>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js" type="text/javascript"></script>
+  
 </head>
 <body>
-<video  id='video'
-        width="360"
-        height="780" 
-        autoplay playsinline>
-        Sorry, video element not supported in your browser
-</video>
-<div id="error"></div>
-<!-- <button onclick="openCamera()"> Open Camera</button> -->
-  <!-- <script src="sketch.js"></script> --> 
-<script>
-
-function setup() {
-  createCanvas(windowWidth, windowHeight);
-  background('red');
-  openCamera();
-}
-
-function draw() {
-
-}
-
-function mousePressed() {
-  
-}
-
-
-
-
-
-
-
-const videoElem = document.getElementById('video');
-const errorElem = document.getElementById('error');
-//Declare the MediaStreamConstraints object
-const constraints = {
-audio: false,
-video: true
-}
-
-function openCamera() {
-console.log('openCamera()');
-//Ask the User for the access of the device camera and microphone
-navigator.mediaDevices.getUserMedia(constraints)
-.then(mediaStream => {
-/* The received mediaStream contains both the 
-  video and audio media data*/
-
-/*Add the mediaStream directly to the source of the video element
-using the srcObject attribute*/
-videoElem.srcObject = mediaStream;
-
-}).catch(err => {
-// handling the error if any
-errorElem.innerHTML = err;
-errorElem.style.display = "block";
-});
-
-}
-  </script>
+  <h1>Real time Object Detection using COCO-SSD and p5.js</h1>
+  <script src="sketch.js"></script>
 </body>
 </html>
+  
