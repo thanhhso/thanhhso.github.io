@@ -22,40 +22,39 @@
 </head>
 <body>
 <video  id='video'
-        width="600"
-        height="300" 
+        width="369"
+        height="780" 
         autoplay playsinline>
         Sorry, video element not supported in your browser
 </video>
 <div id="error"></div>
 <button onclick="openCamera()"> Open Camera</button>
   <!-- <script src="sketch.js"></script> --> 
-
-  <script>
+<script>
       const videoElem = document.getElementById('video');
       const errorElem = document.getElementById('error');
       //Declare the MediaStreamConstraints object
       const constraints = {
-          audio: true,
+          audio: false,
           video: true
       }
 
       function openCamera() {
-//Ask the User for the access of the device camera and microphone
-          navigator.mediaDevices.getUserMedia(constraints)
-              .then(mediaStream => {
-                  /* The received mediaStream contains both the 
-                     video and audio media data*/
+        //Ask the User for the access of the device camera and microphone
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then(mediaStream => {
+            /* The received mediaStream contains both the 
+                video and audio media data*/
 
-/*Add the mediaStream directly to the source of the video element
-                   using the srcObject attribute*/
-                  videoElem.srcObject = mediaStream;
+        /*Add the mediaStream directly to the source of the video element
+        using the srcObject attribute*/
+        videoElem.srcObject = mediaStream;
 
-              }).catch(err => {
-                  // handling the error if any
-                  errorElem.innerHTML = err;
-                  errorElem.style.display = "block";
-              });
+        }).catch(err => {
+            // handling the error if any
+            errorElem.innerHTML = err;
+            errorElem.style.display = "block";
+        });
 
       }
   </script>
