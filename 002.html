@@ -45,7 +45,11 @@ function setup() {
 
 function draw() {
   background(220);
-  
+  fill('blue');
+  rect(100,100,50,50);
+}
+
+function mousePressed() {
   videoImage.drawingContext.drawImage(video, 0, 0);
   image(videoImage, 0, 0);
 }
