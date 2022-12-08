@@ -1,10 +1,7 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
@@ -14,24 +11,44 @@
   <style>
     html, body {margin: 0; padding: 0;} canvas {display: block;} * {font-family: sans-serif;}
   </style>
-  <title>002.1</title>
+  <title>001.005</title>
 </head>
 <body>
-  <p>hi5</p>
-  <script>
-  let capture;
+  <video id="input_video"></video>
+<p>hi5</p>
+<script>
+const video = document.getElementById("input_video"),
+  constraints = {
+    audio: false,
+    video: true,
+  };
+video.style.display = "none";
+
+navigator.mediaDevices
+  .getUserMedia(constraints)
+  .then(function (stream) {
+    video.srcObject = stream;
+    video.onloadedmetadata = function (e) {
+      video.play();
+    };
+  })
+  .catch(function (err) {
+    console.log(err.name + ": " + err.message);
+  });
+
+let videoImage;
+
+function setup() {
+  createCanvas(500, 400);
+  videoImage = createGraphics(width, height);
+}
+
+function draw() {
+  background(220);
   
-  function setup() {
-    createCanvas(100, 100);
-    capture = createCapture(VIDEO);
-    capture.hide();
-  }
-  
-  function draw() {
-    image(capture, 0, 0, width, width * capture.height / capture.width);
-    filter(INVERT);
-  }
-  
-  </script>
+  videoImage.drawingContext.drawImage(video, 0, 0);
+  image(videoImage, 0, 0);
+}
+</script>
 </body>
 </html>
