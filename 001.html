@@ -28,18 +28,28 @@
         Sorry, video element not supported in your browser
 </video>
 <div id="error"></div>
-<button onclick="openCamera()"> Open Camera</button>
+<!-- <button onclick="openCamera()"> Open Camera</button> -->
   <!-- <script src="sketch.js"></script> --> 
 <script>
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background('red');
+  openCamera();
 }
 
 function draw() {
 
 }
+
+
+
+
+
+
+
+
+
 const videoElem = document.getElementById('video');
 const errorElem = document.getElementById('error');
 //Declare the MediaStreamConstraints object
