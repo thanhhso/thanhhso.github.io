@@ -22,7 +22,7 @@
 </head>
 <body>
 <video  id='video'
-        width="369"
+        width="360"
         height="780" 
         autoplay playsinline>
         Sorry, video element not supported in your browser
@@ -31,32 +31,41 @@
 <button onclick="openCamera()"> Open Camera</button>
   <!-- <script src="sketch.js"></script> --> 
 <script>
-      const videoElem = document.getElementById('video');
-      const errorElem = document.getElementById('error');
-      //Declare the MediaStreamConstraints object
-      const constraints = {
-          audio: false,
-          video: true
-      }
 
-      function openCamera() {
-        //Ask the User for the access of the device camera and microphone
-        navigator.mediaDevices.getUserMedia(constraints)
-        .then(mediaStream => {
-            /* The received mediaStream contains both the 
-                video and audio media data*/
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background('red');
+}
 
-        /*Add the mediaStream directly to the source of the video element
-        using the srcObject attribute*/
-        videoElem.srcObject = mediaStream;
+function draw() {
 
-        }).catch(err => {
-            // handling the error if any
-            errorElem.innerHTML = err;
-            errorElem.style.display = "block";
-        });
+}
+const videoElem = document.getElementById('video');
+const errorElem = document.getElementById('error');
+//Declare the MediaStreamConstraints object
+const constraints = {
+audio: false,
+video: true
+}
 
-      }
+function openCamera() {
+//Ask the User for the access of the device camera and microphone
+navigator.mediaDevices.getUserMedia(constraints)
+.then(mediaStream => {
+/* The received mediaStream contains both the 
+  video and audio media data*/
+
+/*Add the mediaStream directly to the source of the video element
+using the srcObject attribute*/
+videoElem.srcObject = mediaStream;
+
+}).catch(err => {
+// handling the error if any
+errorElem.innerHTML = err;
+errorElem.style.display = "block";
+});
+
+}
   </script>
 </body>
 </html>
