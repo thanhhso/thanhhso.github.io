@@ -1,0 +1,38 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.0/addons/p5.dom.min.js"></script>
+  <script src="https://unpkg.com/ml5@0.1.1/dist/ml5.min.js" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"></script>
+  <style>
+    html, body {margin: 0; padding: 0;} canvas {display: block;} * {font-family: sans-serif;}
+  </style>
+  <title>002.1</title>
+</head>
+<body>
+
+<script>
+    let capture;
+
+    function setup() {
+    createCanvas(640, 480);
+    capture = createCapture(VIDEO);
+    }
+    function draw() {
+    background(0);
+    if (capture.loadedmetadata) {
+    let c = capture.get(0, 0, 100, 100);
+    image(c, 0, 0);
+    }
+    }
+
+  </script>
+</body>
+</html>
