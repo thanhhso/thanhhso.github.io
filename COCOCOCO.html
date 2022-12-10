@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.1.9/p5.js"></script>
+    <script src="https://unpkg.com/ml5@0.5.0/dist/ml5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/IDMNYU/p5.js-speech@0.0.3/lib/p5.speech.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+
+  </head>
+  <body>
+<script>
+let detections = []; // all spotted results from COCO
+let cocoSsd;
+let w;
+let h;
+let wv;
+let hv;
+const api = 'https://www.wikihow.com/api.php?format=json&action=';
+
+let temp_query; // fast temporary query
+let query; // detection -> temp_query -> query -> search term for wikiHowHTTP
+let response; // all results from wikiHowHTTP
+let commando; // randomized step 1 of results
+
+let p5speech; // speech synthesis object
+let whip1, whip2, whip3, whip4;
+let whipSounds = [];
+
+function preload() {
+  cocoSsd = ml5.objectDetector('cocossd', detectNow);
+  p5speech = new p5.Speech();
+  whip1 = loadSound('assets/whip1.mp3');
+  whip2 = loadSound('assets/whip2.mp3');
+  whip3 = loadSound('assets/whip3.mp3');
+  whip4 = loadSound('assets/whip4.mp3');
+  whipSounds = [whip1, whip2, whip3, whip4];
+}
+
+function setup() {
+  w = 640;
+  h = 480;
+  // wv = windowWidth;
+  // hv = (wv * 9) / 16;
+  createCanvas(windowWidth, windowHeight);
+  capture = createCapture(VIDEO);
+  capture.size(h, w);
+  capture.hide();
+
+  //p5.speech
+  p5speech.started(startSpeaking);
+  p5speech.ended(endSpeaking);
+}
+
+function mouseClicked() {
+  // console.log('MOUSE detection[0]',detections[0].label);
+  // console.log('MOUSE query', query)
+}
+
+function detectNow() {
+  // console.log("Model ready!");
+  cocoSsd.detect(capture, gotResult);
+}
+
+function gotResult(error, results) {
+  if(error) {
+    console.error(error)
+  }
+  detections = results;
+  // console.log(results);
+  detectNow();
+}
+
+setInterval(() => {
+  try {
+    temp_query = detections[0].label; //
+    // if (detections[0].label) {
+    //     // console.log('detections[0].label >>> ')
+    //     query = detections[0].label;
+    // }
+  } catch (error) {
+    temp_query = undefined  //
+  }
+  console.log('>', temp_query)
+  query = temp_query;
+}, 500);
+
+setInterval(function(){ 
+  
+  console.log('>>> ', query);
+  wikiHowHTTTP(query);
+      /// WikiHow API Stuff
+      if (!response) {
+        // Wait until the WikiHow data has loaded before drawing.
+        return;
+      }      
+      commando = random(response.query.search);
+      commando = commando['title']; // filter out 'title:' from object
+
+      let speechSeq1 = "I see, ";
+      let speechSeq2 = ", so you will, ";
+      let speechSeq3 = ", my slave!";
+      textToSpeech(speechSeq1 + query + speechSeq2 + commando + speechSeq3);
+      // commando = "";
+      
+}, 8000);//run this thang every 7 seconds
+
+function draw() {
+  background('red');  
+  // try {
+  //   query = detections[0].label; //
+  //   // if (detections[0].label) {
+  //   //     // console.log('detections[0].label >>> ')
+  //   //     query = detections[0].label;
+  //   // }
+  // } catch (error) {
+  //   query = undefined  //
+  // }
+  // console.log('>>>', query)
+
+
+  image(capture, 0, 0, w, h);
+  // filter(INVERT);
+  for(let i = 0; i < detections.length; i++) {
+    let object = detections[i];
+    stroke(0, 255, 0);
+    strokeWeight(4);
+    noFill();
+    rect(object.x, object.y, object.width, object.height);
+    noStroke();
+    fill(255);
+    textSize(24);
+    text(object.label, object.x + 10, object.y + 24);
+    textSize(18);
+    fill(255,0,0);
+    text("Confidence: " + Number(object.confidence * 100).toFixed(2) + "%", object.x + 15, object.y + 50);
+  }
+}
+
+function textToSpeech(inputText) {
+      const msg = new SpeechSynthesisUtterance();
+      const voices = p5speech.voices;
+      const voice = voices[33];
+
+      msg.text = inputText;
+      p5speech.setVoice(voice.name);
+      p5speech.setRate(0.85);
+      p5speech.setPitch(0.2);
+      
+      console.log('speak: ', inputText)
+      p5speech.speak(inputText); // starting speaking
+      
+}
+
+function wikiHowHTTTP(q) {
+  // Get the 1000 first results from the WikiHow database using the query
+    let url = api + 'query&format=json&utf8=&list=search&srsearch=' + q + "&srlimit=" + 1000;
+  console.log(url);
+  
+  httpGet(url, 'jsonp', false, function(r) {
+    // when the HTTP request completes, populate the variable that holds the results data
+    response = r;
+  });
+  if (!response) {
+    // Wait until the WikiHow data has loaded before drawing.
+    return;
+  }
+  // console.log('response: ', response);
+}
+
+function whipping() {
+  let randomWhip = floor(random(0, whipSounds.length))
+  console.log(randomWhip)
+  whipSounds[randomWhip].play();
+}
+
+function startSpeaking() {
+    // console.log('START SPEAK');
+}
+
+function endSpeaking() {
+  // console.log('END SPEAK');
+  whipping();
+}
+
+
+</script>
+  </body>
+</html>
