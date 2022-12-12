@@ -7,11 +7,11 @@
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js" integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
     <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.8/addons/p5.dom-min.js"></script> -->
     <script src="p5.min.js"></script>
-    <script src="p5.dom.min.js"></script>
+    <script src="p5.dom.min.js"></script> 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM Plex Mono">
     <title>digital solidarity</title>
 </head>
 <body>
-
 <script>
 /*
 0.74 meter per step
@@ -31,7 +31,8 @@ time & meters -> meters per second -> km/h -> animation SPEED
 
 let autoLogStatus = false; // Boolean for setInterval function getLocation
 let currentdate = new Date(); 
-let button1, button2, button3;
+let button1, button2, button3, statusTime, statusLog;
+let totalSeconds = 0; // timer second variable
 
 let dataGPS = {
     "type": "Feature",
@@ -50,39 +51,90 @@ function preload() {
 }
 
 function setup() {
-  // createCanvas(windowWidth, windowHeight);
-  // background('black');
+  createCanvas(windowWidth, windowHeight);
+  background('black');
 
-  button1 = createButton('start walking');
-  button1.position(0, windowHeight/3 * 0);
-  button1.size( windowWidth, windowHeight/3);
+  statusTime = createDiv('press "start walking </br> and allow location access"');
+  statusTime.position(0, windowHeight/8 * 0);
+  statusTime.size( windowWidth, windowHeight/8);
+  statusTime.style('font-family', 'IBM Plex Mono')
+  statusTime.style('text-align', 'center')
+  statusTime.style('margin', 0);
+  statusTime.style('padding-top', '6.25%');
+  statusTime.style('background-color', 'black');
+  statusTime.style('color', 'white');
+  statusTime.style('border', 'none');
+  statusTime.style('font-size', '1em');
+  statusTime.style('z-index', 1)
+
+  statusLog = createP('every 10 sec the </br> location will be fetched');
+  statusLog.position(0, windowHeight/8 * 1);
+  statusLog.size( windowWidth, windowHeight/8);
+  statusLog.style('font-family', 'IBM Plex Mono')
+  statusLog.style('text-align', 'center')
+  // statusLog.style('margin', 0);
+  // statusTime.style('margin-top', '6.25%');
+  // statusTime.style('padding-left', '10px');
+  // statusTime.style('padding-right', '10px');
+  statusLog.style('background-color', 'black');
+  statusLog.style('color', 'white');
+  statusLog.style('border', 'none');
+  statusLog.style('font-size', '1em');
+  statusLog.style('z-index', 1)
+
+  // statusTime.mousePressed(logStatusOn);
+
+  button1 = createButton('[ start walking ]');
+  button1.position(0, windowHeight/4 * 1);
+  button1.size( windowWidth, windowHeight/4);
+  button1.style('font-family', 'IBM Plex Mono')
+  button1.style('font', 'black');
   button1.style('background-color', 'black');
   button1.style('color', 'white');
   button1.style('border', 'none');
-  button1.style('font-size', '3em');
+  button1.style('font-size', '2em');
+  button1.style('z-index', 1)
   button1.mousePressed(logStatusOn);
 
-  button2 = createButton('stop walking');
-  button2.position(0, windowHeight/3 * 1);
-  button2.size( windowWidth, windowHeight/3);
+  button2 = createButton('[ stop walking ]');
+  button2.position(0, windowHeight/4 * 2);
+  button2.size( windowWidth, windowHeight/4);
+  button2.style('font-family', 'IBM Plex Mono')
   button2.style('background-color', 'black');
   button2.style('color', 'white');
   button2.style('border', 'none');
-  button2.style('font-size', '3em');
+  button2.style('font-size', '2em');
   button2.mousePressed(logStatusOff);
 
-  button3 = createButton('save log data');
-  button3.position(0, windowHeight/3 * 2);
-  button3.size( windowWidth, windowHeight/3);
+  button3 = createButton('[ save log data ]');
+  button3.position(0, windowHeight/4 * 3);
+  button3.size( windowWidth, windowHeight/4);
+  button3.style('font-family', 'IBM Plex Mono')
   button3.style('background-color', 'black');
   button3.style('color', 'white');
   button3.style('border', 'none');
-  button3.style('font-size', '3em');
+  button3.style('font-size', '2em');
   button3.mousePressed(saveLog);
 }
 
+function setTime() {
+  ++totalSeconds;
+  let sec = pad(totalSeconds % 60);
+  let min = pad(parseInt(totalSeconds / 60));
+  statusTime.html(min + ':' + sec);
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
 function draw() {
-  noFill();
+  statusTime.html()
 }
 
 setInterval(logData, 10000);
@@ -94,6 +146,10 @@ function logStatusOn() {
   button1.style('background-color', 'yellow');
   button1.style('color', 'black');
   console.log('autoLogStatus=true')
+
+  // activate timer when function is being called
+  setInterval(function() {let date = new Date;}, 1000); // for timer 1second
+  setInterval(setTime, 1000); // timer
 }
 
 function logStatusOff() {
@@ -116,6 +172,7 @@ function logData() {
     getLocation();
     getDatetime();
     console.log(dataGPS);
+    statusLog.html('Location log: ' + dataGPS.geometry.coordinates.length)
   }
 } 
 
@@ -155,11 +212,11 @@ function keyPressed() {
   }
 }
 
-// function mousePressed() {
-//   // console.log('getPosition mousePressed');
-//   logData();
-//   console.log(dataGPS)
-// }
+function mousePressed() {
+  // console.log('getPosition mousePressed');
+  // logData();
+  // console.log(dataGPS)
+}
  ////////////////////////////////////////////////////// GPS LOCATION TRACKER
 ////////////////////////////////////////////////////// GPS LOCATION TRACKER
 
