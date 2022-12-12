@@ -54,7 +54,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   background('black');
 
-  statusTime = createDiv('press "start walking </br> and allow location access"');
+  statusTime = createDiv('press "start protest" </br> and allow location access');
   statusTime.position(0, windowHeight/8 * 0);
   statusTime.size( windowWidth, windowHeight/8);
   statusTime.style('font-family', 'IBM Plex Mono')
@@ -84,7 +84,7 @@ function setup() {
 
   // statusTime.mousePressed(logStatusOn);
 
-  button1 = createButton('[ start walking ]');
+  button1 = createButton('[ start protest ]');
   button1.position(0, windowHeight/4 * 1);
   button1.size( windowWidth, windowHeight/4);
   button1.style('font-family', 'IBM Plex Mono')
@@ -92,28 +92,28 @@ function setup() {
   button1.style('background-color', 'black');
   button1.style('color', 'white');
   button1.style('border', 'none');
-  button1.style('font-size', '2em');
+  button1.style('font-size', '1.8em');
   button1.style('z-index', 1)
   button1.mousePressed(logStatusOn);
 
-  button2 = createButton('[ stop walking ]');
+  button2 = createButton('[ pause ]');
   button2.position(0, windowHeight/4 * 2);
   button2.size( windowWidth, windowHeight/4);
   button2.style('font-family', 'IBM Plex Mono')
   button2.style('background-color', 'black');
   button2.style('color', 'white');
   button2.style('border', 'none');
-  button2.style('font-size', '2em');
+  button2.style('font-size', '1.8em');
   button2.mousePressed(logStatusOff);
 
-  button3 = createButton('[ save log data ]');
+  button3 = createButton('[ save data ]');
   button3.position(0, windowHeight/4 * 3);
   button3.size( windowWidth, windowHeight/4);
   button3.style('font-family', 'IBM Plex Mono')
   button3.style('background-color', 'black');
   button3.style('color', 'white');
   button3.style('border', 'none');
-  button3.style('font-size', '2em');
+  button3.style('font-size', '1.8em');
   button3.mousePressed(saveLog);
 }
 
