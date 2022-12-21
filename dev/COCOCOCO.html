@@ -25,17 +25,17 @@ let response; // all results from wikiHowHTTP
 let commando; // randomized step 1 of results
 
 let p5speech; // speech synthesis object
-let whip1, whip2, whip3, whip4;
-let whipSounds = [];
+// let whip1, whip2, whip3, whip4;
+// let whipSounds = [];
 
 function preload() {
   cocoSsd = ml5.objectDetector('cocossd', detectNow);
   p5speech = new p5.Speech();
-  whip1 = loadSound('assets/whip1.mp3');
-  whip2 = loadSound('assets/whip2.mp3');
-  whip3 = loadSound('assets/whip3.mp3');
-  whip4 = loadSound('assets/whip4.mp3');
-  whipSounds = [whip1, whip2, whip3, whip4];
+  // whip1 = loadSound('assets/whip1.mp3');
+  // whip2 = loadSound('assets/whip2.mp3');
+  // whip3 = loadSound('assets/whip3.mp3');
+  // whip4 = loadSound('assets/whip4.mp3');
+  // whipSounds = [whip1, whip2, whip3, whip4];
 }
 
 function setup() {
@@ -169,11 +169,11 @@ function wikiHowHTTTP(q) {
   // console.log('response: ', response);
 }
 
-function whipping() {
-  let randomWhip = floor(random(0, whipSounds.length))
-  console.log(randomWhip)
-  whipSounds[randomWhip].play();
-}
+// function whipping() {
+//   let randomWhip = floor(random(0, whipSounds.length))
+//   console.log(randomWhip)
+//   whipSounds[randomWhip].play();
+// }
 
 function startSpeaking() {
     // console.log('START SPEAK');
@@ -181,7 +181,7 @@ function startSpeaking() {
 
 function endSpeaking() {
   // console.log('END SPEAK');
-  whipping();
+  // whipping();
 }
 
 
