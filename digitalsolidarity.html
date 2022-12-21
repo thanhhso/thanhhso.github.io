@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js" integrity="sha512-WJXVjqeINVpi5XXJ2jn0BSCfp0y80IKrYh731gLRnkAS9TKc5KNt/OfLtu+fCueqdWniouJ1ubM+VI/hbo7POQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.8/addons/p5.dom-min.js"></script> -->
+    <!-- <script src="p5.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
+    <!-- <script src="p5.dom.min.js"></script>  -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=IBM Plex Mono">
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <title>digital solidarity</title>
+</head>
+<body>
+<script>
+/*
+0.74 meter per step
+
+≈ 0.70 meter per step
+measure your height in centimetres, 
+then if you are female multiply this by 1.14, 
+and if you are male, multiply your height by 1.35
+
+
+GPS Tracker -> Distance between 2 Points -> METERS & TIME
+Body Height -> stride length -> 
+distance meters / stride length = STEPS
+time & meters -> meters per second -> km/h -> animation SPEED
+
+*/
+let mapboxKey = 'pk.eyJ1IjoidGhhbmgwIiwiYSI6ImNsYnZjM3prcjBscjAzdW1zZjluMXV2bWYifQ.g5slvNSQIppGPj-iPMUGzQ';
+
+let autoLogStatus = false; // Boolean for setInterval function getLocation
+let inputTextStatus = false; // variable -> run remove text field once 
+let currentdate = new Date(); 
+let button1, button2, button3, statusTime, statusLog;
+let totalSeconds = 0; // timer second variable
+let reverseGeoCode;
+
+let mic, recorder, soundFile; // for sound recording
+
+
+let userData = {
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": []
+    },
+    "properties": {
+      "date" : [],
+      "time" : [],
+      "userInputText": "undefined",
+      "duration": 0,
+      "name": currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear() + '@' + currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds(),
+      "city": "",
+    }
+  };
+
+function preload() {  
+}
+
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background('black');
+
+  /*
+  mic = new p5.AudioIn();    // create an audio in
+  mic.start();   // users must manually enable their browser microphone for recording to work properly!
+  recorder = new p5.SoundRecorder(); // create a sound recorder
+  recorder.setInput(mic); // connect the mic to the recorder
+  soundFile = new p5.SoundFile(); // create an empty sound file that we will use to playback the recording
+  */
+
+  statusTime = createDiv('press "start walking </br> and allow location access and starting audio record"');
+  statusTime.position(0, windowHeight/8 * 0);
+  statusTime.size( windowWidth, windowHeight/8);
+  statusTime.style('font-family', 'IBM Plex Mono')
+  statusTime.style('text-align', 'center')
+  statusTime.style('margin', 0);
+  statusTime.style('padding-top', '6.25%');
+  statusTime.style('background-color', 'black');
+  statusTime.style('color', 'white');
+  statusTime.style('border', 'none');
+  statusTime.style('font-size', '0.75em');
+  statusTime.style('z-index', 1)
+
+  statusLog = createP('every 10 sec the </br> location will be fetched');
+  statusLog.position(0, windowHeight/8 * 1);
+  statusLog.size( windowWidth, windowHeight/8);
+  statusLog.style('font-family', 'IBM Plex Mono')
+  statusLog.style('text-align', 'center')
+  statusLog.style('background-color', 'black');
+  statusLog.style('color', 'white');
+  statusLog.style('border', 'none');
+  statusLog.style('font-size', '1em');
+  statusLog.style('z-index', 1)
+
+  button1 = createButton('[ start protest ]');
+  button1.position(0, windowHeight/4 * 1);
+  button1.size( windowWidth, windowHeight/4);
+  button1.style('font-family', 'IBM Plex Mono')
+  button1.style('font', 'black');
+  button1.style('background-color', 'black');
+  button1.style('color', 'white');
+  button1.style('border', 'none');
+  button1.style('font-size', '1em');
+  button1.style('z-index', 1)
+  button1.mousePressed(logStatusOn);
+
+  button2 = createInput('[ type in your cause ]');
+  button2.position(0, windowHeight/4 * 2);
+  button2.size( windowWidth, windowHeight/4);
+  button2.style('font-family', 'IBM Plex Mono');
+  button2.style('text-align', 'center')
+  button2.style('background-color', 'black');
+  button2.style('color', 'white');
+  button2.style('border', 'none');
+  button2.style('font-size', '1em');
+  button2.input(inputEvent);
+
+  button3 = createButton('[ save data ]');
+  button3.position(0, windowHeight/4 * 3);
+  button3.size( windowWidth, windowHeight/4);
+  button3.style('font-family', 'IBM Plex Mono')
+  button3.style('background-color', 'black');
+  button3.style('color', 'white');
+  button3.style('border', 'none');
+  button3.style('font-size', '1em');
+  button3.mousePressed(saveLog);
+}
+
+
+function draw() {
+  statusTime.html()
+}
+
+setInterval(logData, 10000);
+
+// activate timer when autoLogStatus=true is being called
+setInterval(function() {let date = new Date;}, 1000); // for timer 1second
+setInterval(setTime, 1000); // timer
+
+function setTime() {
+  if (autoLogStatus === true) {
+    ++totalSeconds;
+    let sec = pad(totalSeconds % 60);
+    let min = pad(parseInt(totalSeconds / 60));
+    statusTime.html(min + ':' + sec);
+    userData.properties.duration = min + ':' + sec;
+  }
+}
+
+function pad(val) {
+  var valString = val + "";
+  if (valString.length < 2) {
+    return "0" + valString;
+  } else {
+    return valString;
+  }
+}
+
+function logStatusOn() {
+  autoLogStatus = true;
+  button2.style('background-color', 'black');
+  button2.style('color', 'white');
+  button1.style('background-color', 'yellow');
+  button1.style('color', 'black');
+  console.log('autoLogStatus=true')
+}
+
+function logStatusOff() {
+  autoLogStatus = false;
+  button1.style('background-color', 'black');
+  button1.style('color', 'white');
+  button2.style('background-color', 'yellow');
+  button2.style('color', 'black');
+  console.log('autoLogStatus=false')
+}
+
+function inputEvent() {
+  if (inputTextStatus == false) {
+    this.value('');
+    console.log('remove' ,this.value());
+  }
+  inputTextStatus = true;
+  console.log('before' ,this.value());
+  userData.properties.userInputText = this.value();
+  console.log('after' ,userData.properties.userInputText);
+}
+
+function saveLog() {
+  // add CITY to userData
+  userData.properties.city = getReverseGeoCode("52.590471", "13.309219", 10);
+  userData.properties.name = getReverseGeoCode("52.590471", "13.309219", 16) + '@' + currentdate.getHours() + ":"  + currentdate.getMinutes();
+  /*
+  recorder.stop(); // stop recorder, and send the result to soundFile
+  if (!soundFile) {
+    console.log('wait');
+    return;
+  }
+  saveSound(soundFile, 'this.wav'); // save file
+  console.log('saved');
+  */
+  if (!userData.properties.name) {
+    console.log('wait');
+    return;
+  }
+  saveJSON(userData, userData.properties.name);
+  button3.style('background-color', 'green');
+  console.log('save log', userData.properties.city)
+}
+
+function logData() {
+  if (autoLogStatus === true) {
+    getLocation();
+    getDatetime();
+    console.log(userData);
+    statusLog.html('Location log: ' + userData.geometry.coordinates.length)
+  }
+} 
+
+function getLocation() {
+    navigator.geolocation.getCurrentPosition(getposition);
+    // console.log('getPosition');
+}
+
+function getDatetime() {
+  currentdate = new Date(); 
+  userData.properties.date.push([currentdate.getDate() + "/" + (currentdate.getMonth()+1)  + "/" + currentdate.getFullYear()]);
+  userData.properties.time.push([currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds()]);
+  // console.log('userDatadatetime',userData.properties);
+}
+
+function getposition(position) {
+    let lat = position.coords.latitude
+    let lon = position.coords.longitude
+    // console.log('lat & lon',lat, lon)
+    userData.geometry.coordinates.push([lat, lon]);
+    // console.log('userData',userData.geometry.coordinates)
+}
+
+const api = "https://api.mapbox.com/geocoding/v5/mapbox.places/-73.989,40.733.json?types=poi&access_token=" + mapboxKey;
+
+
+function getReverseGeoCode(lat, lng, zoom) {
+  // global variable = reverseGeoCode
+  // nominatim API zoom:3	country; 5 state; 8	county; 10	city; 14 suburb; 16	major streets; 17	major and minor streets; 18	building
+  let url = "https://nominatim.openstreetmap.org/reverse?format=json&lat="+lat+"&lon="+lng+"&zoom="+zoom+"&addressdetails=1";  
+  // console.log('url: ', url);
+  httpGet(url, 'json', false, function(r) {
+    reverseGeoCode = r;
+  });
+  if (!reverseGeoCode) {
+    // Wait until the function data has loaded before drawing.
+    console.log('wait');
+    return;
+  }
+  console.log('finish');
+  console.log('reverseGeoCode: ', reverseGeoCode.display_name);
+  // userData.properties.city = reverseGeoCode.display_name;
+  return reverseGeoCode.display_name
+}
+
+function mouseClicked() {
+}
+ ////////////////////////////////////////////////////// GPS LOCATION TRACKER
+////////////////////////////////////////////////////// GPS LOCATION TRACKER
+
+
+/* ////////////////////////////////////////////////////// DISTANCE BETWEEN TWP GPS POSITIONS IN METERS
+function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+////////////////////////////////////////////////////// DISTANCE BETWEEN TWP GPS POSITIONS IN METERS */
+
+
+</script>
+    
+</body>
+</html>
