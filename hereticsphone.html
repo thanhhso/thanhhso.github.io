@@ -47,7 +47,7 @@ function preload() {
 function setup() {
     createCanvas(displayWidth, displayHeight - 100);
     // Check
-    if ('ontouchstart' in document.documentElement == false) {
+    if ('ontouchstart' in document.documentElement == true) {
         console.log('mobile device')
         let constraints = {
             audio: false,
