@@ -9,7 +9,7 @@
   <style>
     html, body {margin: 0; padding: 0; background-color: black; color: white;} canvas {display: block;}
   </style>
-  <title>yes master</title>
+  <title>heretics phone v1</title>
 </head>
 <body>
 <!-- <p id='status'>Loading Model...</p> -->
@@ -55,7 +55,13 @@ function setup() {
                 }
             }
         }
-        video = createCapture(constraints);
+    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
+    // true for mobile device
+    video = createCapture(constraints);
+    }else{
+    // false for not mobile device
+    video = createCapture(VIDEO);
+    }
     // if ('ontouchstart' in document.documentElement == true) {
     //     console.log('mobile device')
         
