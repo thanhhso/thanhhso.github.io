@@ -47,9 +47,7 @@ function preload() {
 function setup() {
     createCanvas(displayWidth, displayHeight - 100);
     // Check
-    if ('ontouchstart' in document.documentElement == true) {
-        console.log('mobile device')
-        let constraints = {
+    let constraints = {
             audio: false,
             video: {
                 facingMode: {
@@ -58,10 +56,14 @@ function setup() {
             }
         }
         video = createCapture(constraints);
-    } else {
-        console.log("NOT mobile device");
-        video = createCapture(VIDEO);
-    }
+    // if ('ontouchstart' in document.documentElement == true) {
+    //     console.log('mobile device')
+        
+        
+    // } else {
+    //     console.log("NOT mobile device");
+    //     video = createCapture(VIDEO);
+    // }
     video.hide();
     classifier = ml5.imageClassifier('MobileNet', video, modelReady); 
     p5speech = new p5.Speech(); 
