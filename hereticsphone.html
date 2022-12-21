@@ -55,21 +55,18 @@ function setup() {
                 }
             }
         }
-    if(/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
-    // true for mobile device
-    video = createCapture(constraints);
-    }else{
-    // false for not mobile device
-    video = createCapture(VIDEO);
-    }
-    // if ('ontouchstart' in document.documentElement == true) {
-    //     console.log('mobile device')
-        
-        
-    // } else {
-    //     console.log("NOT mobile device");
-    //     video = createCapture(VIDEO);
-    // }
+    if ("ontouchstart" in document.documentElement)
+        {
+        console.log('touch-screen device');
+        // content for touch-screen (mobile) devices
+        video = createCapture(constraints);
+        }
+        else
+        {
+        console.log('non touch-screen device');
+        // everything else (desktop)
+        video = createCapture(VIDEO);
+        }
     video.hide();
     classifier = ml5.imageClassifier('MobileNet', video, modelReady); 
     p5speech = new p5.Speech(); 
