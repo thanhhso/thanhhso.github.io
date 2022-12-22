@@ -19,6 +19,18 @@
 let classifier;
 let video;
 
+// Initialize the Object Detector module
+let objectDetector;
+
+// Holds the image we want to run object detection on
+let img;
+
+function preload() {
+    objectDetector = ml5.objectDetector('cocossd');
+    img = loadImage('https://i.imgur.com/Mzh4cHR.jpg');
+    
+}
+
 function setup() {
   //noCanvas();
   //createCanvas(200,200);
@@ -43,6 +55,9 @@ function setup() {
   
   //video.size(640, 480);
   video.hide();
+
+  objectDetector.detect(img, gotResult);
+  image(img, 0, 0);
   
   // Initialize the Image Classifier method with MobileNet and the video as the second argument
   // classifier = ml5.imageClassifier('MobileNet', video, modelReady);  
@@ -77,14 +92,49 @@ function detectNow() {
 }
 
 // When we get a result
-function gotResult(err, results) {
-  // The results are in an array ordered by probability.
-  select('#result').html(results[0].className);
-  // select('#probability').html(nf(results[0].probability, 0, 2));
-  // classifyVideo();
-  console.log(results[0].className);
-  detectNow();
+// function gotResult(err, results) {
+//   // The results are in an array ordered by probability.
+//   select('#result').html(results[0].className);
+//   // select('#probability').html(nf(results[0].probability, 0, 2));
+//   // classifyVideo();
+//   console.log(results[0].className);
+//   detectNow();
+// }
+
+function gotResult(error, results) {
+
+if (error) {
+    console.error(error);
+} else {
+    console.log(results);
+
+    drawResults(results);
+
 }
+}
+
+function drawResults(results) {
+    results.forEach((result) => {
+
+        // Generates a random color for each object
+        const r = Math.random()*256|0;
+        const g = Math.random()*256|0;
+        const b = Math.random()*256|0;
+
+        // Draw the text
+        stroke(0, 0, 0);
+        strokeWeight(2);
+        textSize(16);
+        fill(r, g, b);
+        text(`${result.label} (${result.confidence.toFixed(2)}%)`, result.x, result.y - 10);
+
+        // Draw the rectangle stroke
+        noFill();
+        strokeWeight(3);
+        stroke(r, g, b);
+        rect(result.x, result.y, result.width, result.height);
+    });
+};
 
 </script>
 </body>
