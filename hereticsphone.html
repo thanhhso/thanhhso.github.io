@@ -9,7 +9,7 @@
   <style>
     html, body {margin: 0; padding: 0; background-color: black; color: white;} canvas {display: block;}
   </style>
-  <title>heretics phone v2</title>
+  <title>heretics phone v3</title>
 </head>
 <body>
 <!-- <p id='status'>Loading Model...</p> -->
@@ -47,26 +47,44 @@ function preload() {
 function setup() {
     createCanvas(displayWidth, displayHeight - 100);
     // Check
-    let constraints = {
-            audio: false,
-            video: {
-                facingMode: {
-                    exact: "environment"
-                }
-            }
+    // let constraints = {
+    //         audio: false,
+    //         video: {
+    //             facingMode: {
+    //                 exact: "environment"
+    //             }
+    //         }
+    //     }
+
+        if (isMobileDevice()) {
+        console.log("mobile device");
+        let constraints = {
+        audio: false,
+        video: {
+        facingMode: {
+        exact: "environment"
         }
-    if ("ontouchstart" in document.documentElement)
-        {
-        console.log('touch-screen device');
-        // content for touch-screen (mobile) devices
+        }
+        };
+
         video = createCapture(constraints);
-        }
-        else
-        {
-        console.log('non touch-screen device');
-        // everything else (desktop)
+        } else {
+        console.log("NOT mobile device");
         video = createCapture(VIDEO);
         }
+
+    // if ("ontouchstart" in document.documentElement)
+    //     {
+    //     console.log('touch-screen device');
+    //     // content for touch-screen (mobile) devices
+    //     video = createCapture(constraints);
+    //     }
+    //     else
+    //     {
+    //     console.log('non touch-screen device');
+    //     // everything else (desktop)
+    //     video = createCapture(VIDEO);
+    //     }
     video.hide();
     classifier = ml5.imageClassifier('MobileNet', video, modelReady); 
     p5speech = new p5.Speech(); 
