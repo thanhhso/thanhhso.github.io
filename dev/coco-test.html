@@ -12,7 +12,7 @@
 <body>
   <p>
       The MobileNet model labeled this as <span id="result">...</span>
-    <br/>with a confidence of <span id="probability">...</span>.
+    <!-- <br/>with a confidence of <span id="probability">...</span>. -->
   </p>
 <script>
 
@@ -63,11 +63,12 @@ function isMobileDevice() {
 }
 
 
-function modelReady() {
-  // Change the status of the model once its ready
-  // Call the classifyVideo function to start classifying the video
-  classifyVideo();
-}
+// function modelReady() {
+//   // Change the status of the model once its ready
+//   // Call the classifyVideo function to start classifying the video
+  
+//   classifyVideo();
+// }
 
 // Get a prediction for the current video frame
 // function classifyVideo() {
@@ -75,8 +76,8 @@ function modelReady() {
 // }
 
 function detectNow() {
-  console.log("Model ready!");
   cocoSsd.detect(capture, gotResult);
+  console.log("Model ready!");
 }
 
 // When we get a result
@@ -85,6 +86,7 @@ function gotResult(err, results) {
   select('#result').html(results[0].className);
   // select('#probability').html(nf(results[0].probability, 0, 2));
   // classifyVideo();
+  console.log(results[0].className);
   detectNow();
 }
 
