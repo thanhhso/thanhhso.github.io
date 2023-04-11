@@ -108,6 +108,7 @@ p {
 
 .html-embed {
   display: none;
+  z-index: 99999;
 }
 
 .label {
@@ -196,7 +197,6 @@ p {
   right: 0%;
   bottom: 0%;
   display: block;
-  overflow: visible;
   width: 50vw;
   height: 75vh;
   cursor: e-resize;
@@ -234,7 +234,6 @@ p {
   right: auto;
   bottom: 0%;
   display: block;
-  overflow: visible;
   width: 50vw;
   height: 75vh;
   cursor: w-resize;
