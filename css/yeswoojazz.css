@@ -53,7 +53,7 @@ a:hover {
   grid-column-gap: 0vw;
   grid-row-gap: 7px;
   grid-template: "Area . Area-2 . Area-3"
-  / 42% auto 20% 5% 17%;
+  / 50% auto 20% 5% 17%;
   grid-auto-columns: .25fr;
   grid-auto-flow: row;
   position: relative;
