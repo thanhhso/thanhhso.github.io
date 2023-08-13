@@ -141,13 +141,20 @@ a:hover {
 .image-carousel {
   grid-area: Area;
   width: 100%;
-  margin-bottom: 16px;
-  max-height: 90vh;
+  max-height: 50vw;
   object-fit: cover;
 }
 
+#carousel-image {
+  visibility: hidden;
+}
+
+#carousel-video {
+  visibility: hidden;
+}
+
 .trigger-arrows {
-  padding-top: 5;
+  margin-top: 16px;
   color: #ACB0AB;
 }
 
@@ -228,6 +235,13 @@ a:hover {
     margin-bottom: 10em;
   }
 
+  .image-carousel {
+    grid-area: Area;
+    width: 100%;
+    max-height: 85vh;
+    object-fit: cover;
+  }
+
   .project-text {
     position: relative;
     margin: 0px;
@@ -239,6 +253,10 @@ a:hover {
     align-self: start;
     margin: 0px;
     padding: 0px;
+  }
+
+  .trigger-arrows {
+    padding-top: 0.35em;
   }
 
 }
