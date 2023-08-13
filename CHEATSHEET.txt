@@ -1,0 +1,17 @@
+<br>
+AInserts a line break (carriage return)
+
+<cite> </cite>
+Creates a citation, usually processed in italics
+
+<em> </em>
+Emphasizes a word (usually processed in italics)
+
+<strong> </strong>
+Emphasizes a word (usually processed in bold)
+
+<a href="URL">clickable text</a>
+Creates a hyperlink to a Uniform Resource Locator
+
+<a href="mailto:EMAIL_ADDRESS">clickable text</a> 
+Creates a hyperlink to an email address

@@ -1,0 +1,244 @@
+@font-face {
+  font-family: 'VCR'; /* You can name this whatever you want */
+  src: url('/css/vcr_osd_mono.woff2') format('woff2');
+}
+
+@import url('https://fonts.cdnfonts.com/css/inter'); 
+
+* {
+  user-select: none; 
+  -moz-user-select: none;
+  -webkit-text-select: none;
+  -webkit-user-select: none;
+  font-family: 'Inter', sans-serif;
+}
+
+p {
+  color: #949494;
+}
+
+a {
+  color: #949494;
+  text-decoration: none;
+  display: block;
+  border-radius: 50%;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  background-color: black;
+  color: white; /* This changes the text color of the selected text */
+}
+
+::-moz-selection {
+  background-color: black;
+  color: white;
+}
+
+.w-layout-grid {
+  grid-row-gap: 16px;
+  grid-column-gap: 16px;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  display: grid;
+  padding: 7px;
+  
+}
+
+.grid {
+  grid-column-gap: 0vw;
+  grid-row-gap: 7px;
+  grid-template: "Area . Area-2 . Area-3"
+  / 42% auto 20% 5% 17%;
+  grid-auto-columns: .25fr;
+  grid-auto-flow: row;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+  flex-direction: row;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+.body {
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  font-size: 12px;
+  line-height: 14px;
+}
+
+.about-me {
+  padding-right: 30px;
+  grid-area: 1 / 5 / 2 / 6;
+  align-self: start;
+  margin-top: 0%;
+  user-select: text; 
+  -moz-user-select: text;
+  -webkit-text-select: text;
+  -webkit-user-select: text;
+}
+
+.project-text {
+  position: relative;
+  grid-area: 1 / 1 / 2 / 2;
+  align-self: start;
+  margin-top: 0%;
+  user-select: text; 
+  -moz-user-select: text;
+  -webkit-text-select: text;
+  -webkit-user-select: text;
+}
+
+.media-status {
+  text-align: left;
+  padding-top: 3em;
+  color: #949494;
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
+.div-trigger {
+  grid-area: Area;
+  position: relative;
+  height: fit-content;
+}
+
+.previous {
+  width: 50%;
+  height: auto;
+  cursor: w-resize;
+  position: absolute;
+  top: 0%;
+  bottom: 0%;
+  left: 0%;
+  right: auto;
+}
+
+.next {
+  width: 50%;
+  height: auto;
+  cursor: e-resize;
+  position: absolute;
+  top: 0%;
+  bottom: 0%;
+  left: auto;
+  right: 0%;
+}
+
+.image-carousel {
+  grid-area: Area;
+  width: 100%;
+  margin-bottom: 16px;
+  max-height: 90vh;
+  object-fit: cover;
+}
+
+.trigger-arrows {
+  padding-top: 5;
+  color: #ACB0AB;
+}
+
+.col-right-arrow, .col-left-arrow {
+  padding-left: 0; 
+  padding-right: 0;
+}
+
+.left-arrow {
+  text-align: left;
+  font-size: 1.25em; 
+  line-height: 1em;
+  position: absolute;
+  top: auto;
+  bottom: 0%;
+  left: 0%;
+  right: 0%;
+  opacity: 0%;
+  transition: opacity 0.5s;
+}
+
+.right-arrow {
+  text-align: right;
+  font-size: 1.25em; 
+  line-height: 1em;
+  position: absolute;
+  top: auto;
+  bottom: 0%;
+  left: 0%;
+  right: 0%;
+  opacity: 0%;
+  transition: opacity 0.5s;
+}
+
+.previous:hover ~ .left-arrow {
+  opacity: 100%;
+}
+.next:hover ~ .right-arrow {
+  opacity: 100%;
+}
+
+.grid-2 {
+  grid-template-rows: auto auto;
+  grid-template-columns: auto;
+}
+
+.paragraph {
+  width: 66%;
+}
+
+
+#project-column {
+  grid-area: Area-2;
+  align-self: start;
+  margin-top: 0px;
+  padding-top: 0px;
+}
+
+@media screen and (max-width: 479px) {
+  .grid {
+    display: inline-block;
+  }
+
+  .body {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .about-me {
+    padding: 0px;
+    margin-bottom: 5em;
+  }
+
+  .media-status {
+    text-align: left;
+    padding: 0px;
+    margin-bottom: 10em;
+  }
+
+  .project-text {
+    position: relative;
+    margin: 0px;
+    padding: 0px;
+  }
+
+  #project-column {
+    grid-area: Area-2;
+    align-self: start;
+    margin: 0px;
+    padding: 0px;
+  }
+
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>thanh.so</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/yeswoojazz.css" rel="stylesheet" type="text/css">
+  <link href="css/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href="css/webclip.png" rel="apple-touch-icon">
+  <script src="build/airtable.browser.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+</head>
+
+<body class="body">
+
+  <div class="w-layout-grid grid">
+
+    <div id="div-trigger" class="div-trigger">
+      <img src="" loading="eager" width="630" id="carousel" alt="" class="image-carousel">
+      <div id="next-button" class="next"></div>
+      <div id="previous-button" class="previous"></div>
+      <div class="trigger-arrows w-row">
+        <div class="col-left-arrow w-col w-col-6">
+          <div class="left-arrow">←</div>
+        </div>
+          <div class="col-right-arrow w-col w-col-6">
+            <div class="right-arrow">→</div>
+          </div>
+        </div>
+
+    </div>
+
+    <div id="project-column" class="w-layout-grid grid-2">
+      <p id="project-text" class="project-text"></p>
+      <div id="media-status" class="media-status"></div>
+    </div>
+
+    <p id="about-me" class="about-me">thanh nguyen</p>
+  </div>
+
+  <script>
+
+    // Log to verify script load
+    console.log('hello world');
+
+    // Airtable configuration and initialization
+    let Airtable = require('airtable');
+    Airtable.configure({
+      endpointUrl: 'https://api.airtable.com',
+      apiKey: 'patFib1Y9Noeje34z.04881ce6df155c365ce7f3a929c6ac74cd9d2353b3194fc9b42c895afce97cde' // Ensure to keep this secure in production
+    });
+    let base = Airtable.base('appt34Q81KF28m0BV');
+
+    let treeDynamic = [];
+    let treeStatic = [];
+
+    // Fetch dynamic portfolio data from Airtable
+    base('portfolio').select({
+      view: "Grid view"
+    }).eachPage(fetchDynamicData, handleAirtableError);
+
+    // Fetch static content data from Airtable
+    base('static').select({
+      view: "Grid view"
+    }).eachPage(fetchStaticData, handleAirtableError);
+
+    /**
+     * Fetches dynamic data from Airtable and updates treeDynamic array.
+     */
+    function fetchDynamicData(records, fetchNextPage) {
+      records.forEach(record => {
+        let url = record.get('Media')[0].url;
+        treeDynamic.push({
+          'order': record.get('Order'),
+          'description': record.get('Description'),
+          'url': url,
+          'ratio': record.get('Ratio'),
+          'online': record.get('Online')
+        });
+      });
+      fetchNextPage();
+    }
+
+    /**
+     * Fetches static data from Airtable and updates treeStatic array.
+     */
+    function fetchStaticData(records, fetchNextPage) {
+      records.forEach(record => {
+        let url = record.get('Media')[0].url;
+        treeStatic.push({
+          'about': record.get('About'),
+          'url': url
+        });
+      });
+      fetchNextPage();
+      updateStaticContent();
+    }
+
+    /**
+     * Handles potential errors when fetching data from Airtable.
+     */
+    function handleAirtableError(err) {
+      if (err) {
+        console.error("Error fetching data from Airtable:", err);
+        return;
+      }
+    }
+
+    /**
+     * Updates the 'about-me' section and carousel with static content.
+     */
+    function updateStaticContent() {
+      if (treeStatic[0]) {
+        document.getElementById('about-me').innerHTML = treeStatic[0].about || "";
+        document.getElementById('carousel').src = treeStatic[0].url;
+      } else {
+        console.warn("Static data is not available (from Airtable).");
+      }
+    }
+
+    // Carousel navigation
+    let currentIndex = 0;
+
+    document.getElementById('next-button').addEventListener('click', navigateCarousel);
+    document.getElementById('previous-button').addEventListener('click', navigateCarousel);
+
+    // Initialize visibility status for media
+    updateMediaStatusVisibility();
+
+    /**
+     * Handles carousel navigation (both next and previous).
+     */
+    function navigateCarousel(event) {
+      currentIndex = event.target.id === 'next-button' ? currentIndex + 1 : currentIndex - 1;
+
+      if (currentIndex >= treeDynamic.length) currentIndex = 0;
+      if (currentIndex < 0) currentIndex = treeDynamic.length - 1;
+
+      updateText(treeDynamic[currentIndex].url, treeDynamic[currentIndex].description, () => {
+        document.getElementById('carousel').src = treeDynamic[currentIndex].url;
+      });
+
+      // Apply Ratio to CSS
+      if (treeDynamic[currentIndex].ratio === 'horizontal') {
+          document.querySelector('.grid').style.gridTemplate = 
+              '"Area . Area-2 . Area-3" / 50% auto 20% 5% 17%';
+      } else {
+        document.querySelector('.grid').style.gridTemplate = 
+              '"Area . Area-2 . Area-3" / 42% auto 20% 5% 17%';
+      }
+
+      // Update or Hide Media Status Count 
+      document.getElementById('media-status').innerText = `${currentIndex + 1} ––– ${treeDynamic.length}`;
+      updateMediaStatusVisibility();
+
+      // Preload previous or next media
+      preloadAdjacentImages();
+    }
+
+    /**
+     * Updates project text after ensuring the image is loaded.
+     */
+    function updateText(imgSrc, text, callback) {
+      const img = new Image();
+      img.src = imgSrc;
+
+      img.onload = () => {
+        document.getElementById('project-text').innerHTML = text || "";
+        callback();
+      };
+    }
+
+    /**
+     * Toggles media status visibility based on currentIndex.
+     */
+    function updateMediaStatusVisibility() {
+      var mediaStatusDiv = document.getElementById('media-status');
+      mediaStatusDiv.style.display = currentIndex === 0 ? 'none' : 'block';
+    }
+
+    /**
+     * Preloads adjacent images to ensure smooth carousel navigation.
+     */
+    function preloadAdjacentImages() {
+      for (let i = 1; i <= 3; i++) {
+        if (currentIndex + i < treeDynamic.length) new Image().src = treeDynamic[currentIndex + i].url;
+        if (currentIndex - i >= 0) new Image().src = treeDynamic[currentIndex - i].url;
+      }
+    }
+
+    /**
+     * Arrow display on hover
+     */    
+
+    $(document).ready(function() {
+      $(".previous").hover(
+          function() {
+              // on hover
+              $(".left-arrow").css("opacity", "1");
+          },
+          function() {
+              // on hover out
+              $(".left-arrow").css("opacity", "0");
+          }
+      );
+
+      $(".next").hover(
+          function() {
+              // on hover
+              $(".right-arrow").css("opacity", "1");
+          },
+          function() {
+              // on hover out
+              $(".right-arrow").css("opacity", "0");
+          }
+      );
+    });
+
+  </script>
+</body>
+
+</html>
