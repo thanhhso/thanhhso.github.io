@@ -19,17 +19,20 @@
   <div class="w-layout-grid grid">
 
     <div id="div-trigger" class="div-trigger">
-      <img src="" loading="eager" width="630" id="carousel" alt="" class="image-carousel">
+      <div id="carousel-container">
+        <img src="" loading="eager" id="carousel" alt="" class="image-carousel">
+      </div>
+      
       <div id="next-button" class="next"></div>
       <div id="previous-button" class="previous"></div>
       <div class="trigger-arrows w-row">
         <div class="col-left-arrow w-col w-col-6">
           <div class="left-arrow">←</div>
         </div>
-          <div class="col-right-arrow w-col w-col-6">
-            <div class="right-arrow">→</div>
-          </div>
+        <div class="col-right-arrow w-col w-col-6">
+          <div class="right-arrow">→</div>
         </div>
+      </div>
 
     </div>
 
@@ -78,7 +81,9 @@
           'description': record.get('Description'),
           'url': url,
           'ratio': record.get('Ratio'),
-          'online': record.get('Online')
+          'online': record.get('Online'),
+          'fallback': record.get('Fallback'),
+          'mediaType': record.get('Media Type')
         });
       });
       fetchNextPage();
@@ -139,25 +144,31 @@
       if (currentIndex >= treeDynamic.length) currentIndex = 0;
       if (currentIndex < 0) currentIndex = treeDynamic.length - 1;
 
-      updateText(treeDynamic[currentIndex].url, treeDynamic[currentIndex].description, () => {
-        document.getElementById('carousel').src = treeDynamic[currentIndex].url;
-      });
+      // Check if browser is Chrome or Mozilla (Firefox)
+      const userAgent = navigator.userAgent.toLowerCase();
+      
+        if (userAgent.indexOf('chrome') > -1 || userAgent.indexOf('firefox') > -1) {
+          updateCarouselMedia(currentIndex);
+          document.getElementById('project-text').innerHTML = treeDynamic[currentIndex].description || "";
+        } else {
+          updateText(treeDynamic[currentIndex].url, treeDynamic[currentIndex].description, () => {
+            document.getElementById('carousel').src = treeDynamic[currentIndex].url;
+          });
+        }
+    
 
       // Apply Ratio to CSS
       if (treeDynamic[currentIndex].ratio === 'horizontal') {
-          document.querySelector('.grid').style.gridTemplate = 
-              '"Area . Area-2 . Area-3" / 50% auto 20% 5% 17%';
+        document.querySelector('.grid').style.gridTemplate =
+          '"Area . Area-2 . Area-3" / 50vw auto 20% 5% 17%';
       } else {
-        document.querySelector('.grid').style.gridTemplate = 
-              '"Area . Area-2 . Area-3" / 42% auto 20% 5% 17%';
+        document.querySelector('.grid').style.gridTemplate =
+          '"Area . Area-2 . Area-3" / 50vw auto 20% 5% 17%';
       }
 
       // Update or Hide Media Status Count 
       document.getElementById('media-status').innerText = `${currentIndex + 1} ––– ${treeDynamic.length}`;
       updateMediaStatusVisibility();
-
-      // Preload previous or next media
-      preloadAdjacentImages();
     }
 
     /**
@@ -182,42 +193,66 @@
     }
 
     /**
-     * Preloads adjacent images to ensure smooth carousel navigation.
-     */
-    function preloadAdjacentImages() {
-      for (let i = 1; i <= 3; i++) {
-        if (currentIndex + i < treeDynamic.length) new Image().src = treeDynamic[currentIndex + i].url;
-        if (currentIndex - i >= 0) new Image().src = treeDynamic[currentIndex - i].url;
-      }
-    }
-
-    /**
      * Arrow display on hover
-     */    
+     */
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $(".previous").hover(
-          function() {
-              // on hover
-              $(".left-arrow").css("opacity", "1");
-          },
-          function() {
-              // on hover out
-              $(".left-arrow").css("opacity", "0");
-          }
+        function () {
+          // on hover
+          $(".left-arrow").css("opacity", "1");
+        },
+        function () {
+          // on hover out
+          $(".left-arrow").css("opacity", "0");
+        }
       );
 
       $(".next").hover(
-          function() {
-              // on hover
-              $(".right-arrow").css("opacity", "1");
-          },
-          function() {
-              // on hover out
-              $(".right-arrow").css("opacity", "0");
-          }
+        function () {
+          // on hover
+          $(".right-arrow").css("opacity", "1");
+        },
+        function () {
+          // on hover out
+          $(".right-arrow").css("opacity", "0");
+        }
       );
     });
+
+    function updateCarouselMedia(currentIndex) {
+        const carouselContainer = $('#carousel-container');
+        const currentData = treeDynamic[currentIndex];
+
+        if (currentData.mediaType === 'video') {
+            // If there's an image in the carousel, remove it
+            carouselContainer.find('img').remove();
+            
+            let videoElem = carouselContainer.find('video');
+            if (videoElem.length === 0) {
+                // If video tag doesn't exist, create and append
+                videoElem = $(`
+                    <video width="100%" controls muted playsinline >
+                        <source src="${currentData.url}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                `);
+                carouselContainer.append(videoElem);
+                videoElem[0].play(); // Start playing immediately
+            } else {
+                // If video tag exists, update its source
+                videoElem.find('source').attr('src', currentData.url);
+                videoElem[0].load(); // Load the new video source
+                videoElem[0].play(); // Start playing immediately
+            }
+        } else {
+            // Clear the current media
+            carouselContainer.empty();
+            const imgElem = $(`<img src="${currentData.url}" loading="eager" width="100%" class="image-carousel">`);
+            carouselContainer.append(imgElem);
+        }
+    }
+
 
   </script>
 </body>
