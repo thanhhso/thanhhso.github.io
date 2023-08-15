@@ -256,49 +256,39 @@
         }
     }
 
-    function preloadMediaToHiddenDiv() {
-      const preloadDiv = document.getElementById('hidden-preload');
-      
-      // Sequentially load media
-      function loadNextMedia(index) {
-              if (index >= treeDynamic.length) {
-                  console.log("All media preloaded");
-                  return;
-              }
 
-              let media = treeDynamic[index];
-              if (media.mediaType === 'image') {
-                  let img = new Image();
-                  img.src = media.url;
-                  img.onload = () => loadNextMedia(index + 1); // Load next media after current one is loaded
-                  img.onerror = (err) => {
-                      console.error("Error preloading image", media.url, err);
-                      loadNextMedia(index + 1);
-                  };
+      function preloadMediaToHiddenDiv() {
+        const preloadDiv = document.getElementById('hidden-preload');
+        let loadedMediaCount = 0;
 
-                  preloadDiv.appendChild(img); // This will cause the image to be fetched
-              } else {
-                  // Handle other media types as necessary
-                  // Example for video:
-                  if (media.mediaType === 'video') {
-                      let video = document.createElement('video');
-                      video.src = media.url;
-                      video.onloadeddata = () => loadNextMedia(index + 1);
-                      video.onerror = (err) => {
-                          console.error("Error preloading video", media.url, err);
-                          loadNextMedia(index + 1);
-                      };
-
-                      preloadDiv.appendChild(video);
-                  } else {
-                      // If not a recognized media type, skip to the next one
-                      loadNextMedia(index + 1);
-                  }
-              }
-          }
-
-          loadNextMedia(0); // Start the preload process
+        treeDynamic.forEach((media, index) => {
+            if (media.mediaType === 'image') {
+                let img = new Image();
+                img.src = media.url;
+                img.onload = () => {
+                    loadedMediaCount++;
+                    console.log(`Loaded image ${loadedMediaCount}/${treeDynamic.length}`);
+                };
+                img.onerror = (err) => {
+                    console.error("Error preloading image", media.url, err);
+                };
+                preloadDiv.appendChild(img); // This will cause the image to be fetched
+            } else if (media.mediaType === 'video') {
+                let video = document.createElement('video');
+                video.src = media.url;
+                video.onloadeddata = () => {
+                    loadedMediaCount++;
+                    console.log(`Loaded video ${loadedMediaCount}/${treeDynamic.length}`);
+                };
+                video.onerror = (err) => {
+                    console.error("Error preloading video", media.url, err);
+                };
+                preloadDiv.appendChild(video);
+            }
+        });
       }
+
+    
   </script>
 </body>
 
