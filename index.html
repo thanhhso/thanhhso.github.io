@@ -15,12 +15,13 @@
 </head>
 
 <body class="body">
+  <div id="hidden-preload" style="display: none;"></div>
 
   <div class="w-layout-grid grid">
 
     <div id="div-trigger" class="div-trigger">
       <div id="carousel-container">
-        <img src="" loading="eager" id="carousel" alt="" class="image-carousel">
+        <img src="" loading="eager" id="carousel" alt="" width="100%" class="image-carousel">
       </div>
       
       <div id="next-button" class="next"></div>
@@ -87,6 +88,8 @@
         });
       });
       fetchNextPage();
+      preloadMediaToHiddenDiv();  // Preload media in the hidden div
+
     }
 
     /**
@@ -253,7 +256,49 @@
         }
     }
 
+    function preloadMediaToHiddenDiv() {
+      const preloadDiv = document.getElementById('hidden-preload');
+      
+      // Sequentially load media
+      function loadNextMedia(index) {
+              if (index >= treeDynamic.length) {
+                  console.log("All media preloaded");
+                  return;
+              }
 
+              let media = treeDynamic[index];
+              if (media.mediaType === 'image') {
+                  let img = new Image();
+                  img.src = media.url;
+                  img.onload = () => loadNextMedia(index + 1); // Load next media after current one is loaded
+                  img.onerror = (err) => {
+                      console.error("Error preloading image", media.url, err);
+                      loadNextMedia(index + 1);
+                  };
+
+                  preloadDiv.appendChild(img); // This will cause the image to be fetched
+              } else {
+                  // Handle other media types as necessary
+                  // Example for video:
+                  if (media.mediaType === 'video') {
+                      let video = document.createElement('video');
+                      video.src = media.url;
+                      video.onloadeddata = () => loadNextMedia(index + 1);
+                      video.onerror = (err) => {
+                          console.error("Error preloading video", media.url, err);
+                          loadNextMedia(index + 1);
+                      };
+
+                      preloadDiv.appendChild(video);
+                  } else {
+                      // If not a recognized media type, skip to the next one
+                      loadNextMedia(index + 1);
+                  }
+              }
+          }
+
+          loadNextMedia(0); // Start the preload process
+      }
   </script>
 </body>
 
